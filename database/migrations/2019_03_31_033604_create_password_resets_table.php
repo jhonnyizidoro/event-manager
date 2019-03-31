@@ -17,7 +17,7 @@ class CreatePasswordResetsTable extends Migration
 			$table->bigIncrements('id');
 			$table->string('email');
 			$table->string('token');
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 

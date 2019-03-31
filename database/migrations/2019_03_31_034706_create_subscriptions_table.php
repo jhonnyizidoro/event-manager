@@ -17,7 +17,7 @@ class CreateSubscriptionsTable extends Migration
             $table->bigIncrements('id');
 			$table->timestamp('check_in');
 			$table->timestamp('check_out');
-			$table->timestamp('created_at');
+			$table->timestamps();
         });
     }
 

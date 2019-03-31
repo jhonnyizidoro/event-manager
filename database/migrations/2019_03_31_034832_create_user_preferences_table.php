@@ -18,6 +18,7 @@ class CreateUserPreferencesTable extends Migration
 			$table->boolean('receive_events_email');
 			$table->boolean('receive_events_notification');
 			$table->integer('events_notification_range')->default(50);
+			$table->timestamps();
         });
     }
 
