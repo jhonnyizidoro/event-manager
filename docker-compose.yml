@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0.13
+    container_name: eventmanager_db
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: eventmanager
+    volumes:
+      - events_dbdata:/var/lib/mysql
+  web:
+    container_name: eventmanager_web
+    build:
+      context: ./docker
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/app
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+volumes:
+  events_dbdata:
+    driver: local
