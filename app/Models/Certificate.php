@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Certificate extends Model
 {	
     protected $fillesble = [
-		'name', 'state_id',
+		'hash', 'event_id', 'logo_id', 'signature_id', 'user_id'
 	];
 }
