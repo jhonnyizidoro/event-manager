@@ -39,7 +39,7 @@ return [
     'dimensions'           => 'O valor informado para o campo :attribute não é uma dimensão de imagem válida.',
     'distinct'             => 'O campo :attribute contém um valor duplicado.',
     'email'                => 'O campo :attribute não contém um endereço de email válido.',
-    'exists'               => 'O valor selecionado para o campo :attribute é inválido.',
+    'exists'               => 'O valor informado para o campo :attribute não foi encontrado em nossos registros.',
     'file'                 => 'O campo :attribute deve conter um arquivo.',
     'filled'               => 'O campo :attribute é obrigatório.',
     'gt'                   => [

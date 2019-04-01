@@ -137,7 +137,7 @@ class CreateRelationshipRules extends Migration
 		});
 		
 		Schema::table('users', function (Blueprint $table) {
-			$table->unsignedBigInteger('address_id');
+			$table->unsignedBigInteger('address_id')->nullable();
 			$table->foreign('address_id')->references('id')->on('addresses');
 		});
 	}
