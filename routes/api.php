@@ -12,6 +12,6 @@ Route::prefix('users')->group(function() {
 	Route::post('', 'UserController@store');
 	Route::get('', 'UserController@index')->middleware('admin');
 	Route::get('me', 'UserController@me')->middleware('auth');
-	Route::put('', 'UserController@update')->middleware('auth');
-	Route::delete('{id}', 'UserController@destroy')->middleware('auth');
+	Route::put('', 'UserController@update')->middleware('owner');
+	Route::delete('{id}', 'UserController@destroy')->middleware('owner');
 });

@@ -10,8 +10,8 @@ class UsersTableSeeder extends Seeder
         $user = User::create([
 			'name' => 'Jhonny ADMIN Menarim',
 			'email' => 'admin@gmail.com',
-			'password' => bcrypt('123456'),
-			'nickname' => 'jhonnymenarim',
+			'password' => '123456',
+			'nickname' => 'jhonnymenarimadmin',
 			'birthdate' => '1997-01-06',
 			'is_admin' => true,
 			'address_id' => 1
@@ -20,8 +20,8 @@ class UsersTableSeeder extends Seeder
 		$user = User::create([
 			'name' => 'Jhonny USER Menarim',
 			'email' => 'user@gmail.com',
-			'password' => bcrypt('123456'),
-			'nickname' => 'jhonnymenarim',
+			'password' => '123456',
+			'nickname' => 'jhonnymenarimuser',
 			'birthdate' => '1997-01-06',
 			'address_id' => 1
 		]);

@@ -7,6 +7,8 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Handler extends ExceptionHandler
 {
@@ -55,6 +57,10 @@ class Handler extends ExceptionHandler
 			return json([], 'Token Inválido.', false, 403);
 		} elseif ($exception instanceof JWTException) {
 			return json([], 'Erro ao validar o token. Verifique se ele foi informado na requisição.', false, 403);
+		} elseif ($exception instanceof MethodNotAllowedHttpException) {
+			return json([], 'A rota acessada não suporta o método utilizado.', false, 404);
+		} elseif ($exception instanceof ModelNotFoundException) {
+			return json([], 'Nenhum registro encontrado com o ID informado.', false, 404);
 		}
 
         return parent::render($request, $exception);

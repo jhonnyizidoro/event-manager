@@ -43,22 +43,18 @@ class UserController extends Controller
     }
 
     /**
-     * TODO: Verifica se o usuário é administrador ou o dono da conta antes de atualizar
 	 * TODO: Realizado tratamento para que apenas administradores possam adicionar outros administradores
 	 * @return Resource: usuário atualizado
      */
     public function update(UpdateUserRequest $request)
     {
 		$user = User::find($request->id);
-		$loggedUser = Auth::user();
-		if ($loggedUser->is_admin || $loggedUser == $user) {
-			if (!$loggedUser->is_admin) {
-				$request->request->remove('is_admin');
-			}
-			$user->update($request->all());
-			return json($user, 'Usuário atulizado com sucesso.');
+
+		if (!Auth::user()->is_admin) {
+			$request->request->remove('is_admin');
 		}
-		return json([], 'Você não tem permissão para atualizar esse usuário.');
+		$user->update($request->all());
+		return json($user, 'Usuário atualizado com sucesso.');
     }
 
     /**
@@ -68,13 +64,9 @@ class UserController extends Controller
     public function destroy($id)
     {
 		$user = User::findOrFail($id);
-		$loggedUser = Auth::user();
-		if ($loggedUser->is_admin || $loggedUser == $user) {
-			$user->update([
-				'is_active' => !$user->is_active
-			]);
-			return json($user, 'Usuário ativado/desativado com sucesso.');
-		}
-		return json([], 'Você não tem permissão para ativar/desativar esse usuário.');
+		$user->update([
+			'is_active' => !$user->is_active
+		]);
+		return json($user, 'Usuário ativado/desativado com sucesso.');
     }
 }
