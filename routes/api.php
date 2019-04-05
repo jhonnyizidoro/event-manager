@@ -8,10 +8,15 @@ Route::prefix('auth')->group(function() {
 });
 
 //Rotas de gerênciamento de usuários
-Route::prefix('users')->group(function() {
+Route::prefix('user')->group(function() {
 	Route::post('', 'UserController@store');
 	Route::get('', 'UserController@index')->middleware('admin');
 	Route::get('me', 'UserController@me')->middleware('auth');
 	Route::put('', 'UserController@update')->middleware('owner');
 	Route::delete('{id}', 'UserController@destroy')->middleware('owner');
+});
+
+//Rotas de gerênciamento de usuários
+Route::prefix('address')->group(function() {
+	Route::put('', 'AddressController@update');
 });
