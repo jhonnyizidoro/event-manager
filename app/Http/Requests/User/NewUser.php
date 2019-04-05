@@ -28,9 +28,7 @@ class NewUser extends FormRequest
         return [
 			'name' => 'required|string|max:255',
 			'email' => 'required|email|max:255|unique:users',
-			'password' => 'required|confirmed|string|max:59|min:6',
-			'nickname' => 'string|max:255',
-			'birthdate' => 'date|date_format:d/m/Y'
+			'password' => 'required|confirmed|string|max:59|min:6'
         ];
 	}
 	

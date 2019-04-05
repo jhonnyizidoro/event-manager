@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserPreference;
 use App\Http\Requests\User\NewUser as NewUserRequest;
 use App\Http\Requests\User\UpdateUser as UpdateUserRequest;
 use Auth;
@@ -26,10 +27,8 @@ class UserController extends Controller
     public function store(NewUserRequest $request)
     {
 		$request->request->remove('is_admin');
-		if ($user = User::create($request->all())) {
-			return json($user, 'Usuário Cadastrado com sucesso.');
-		}
-		return json([], 'Erro ao cadastrar usuário.', false, 500);
+		$user = User::create($request->all());
+		return json($user, 'Usuário Cadastrado com sucesso.');
     }
 
     /**
@@ -44,16 +43,21 @@ class UserController extends Controller
 
     /**
 	 * TODO: Realizado tratamento para que apenas administradores possam adicionar outros administradores
+	 * TODO: Também cria/atualiza uma preferência do usuário
 	 * @return Resource: usuário atualizado
      */
     public function update(UpdateUserRequest $request)
     {
-		$user = User::find($request->id);
-
 		if (!Auth::user()->is_admin) {
 			$request->request->remove('is_admin');
 		}
+
+		$user = User::find($request->id);
 		$user->update($request->all());
+
+		$request->request->add(['user_id' => $user->id]);
+		UserPreference::updateOrCreate(['user_id' => $user->id], $request->all());
+		
 		return json($user, 'Usuário atualizado com sucesso.');
     }
 

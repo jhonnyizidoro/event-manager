@@ -15,8 +15,8 @@ class CreateUserPreferencesTable extends Migration
     {
         Schema::create('user_preferences', function (Blueprint $table) {
             $table->bigIncrements('id');
-			$table->boolean('receive_events_email');
-			$table->boolean('receive_events_notification');
+			$table->boolean('receive_events_email')->default(false);
+			$table->boolean('receive_events_notification')->default(false);
 			$table->integer('events_notification_range')->default(50);
 			$table->timestamps();
         });

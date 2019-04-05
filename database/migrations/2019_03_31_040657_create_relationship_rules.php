@@ -35,10 +35,6 @@ class CreateRelationshipRules extends Migration
 		});
 		
 		Schema::table('comments', function (Blueprint $table) {
-			$table->unsignedBigInteger('post_id');
-			$table->foreign('post_id')->references('id')->on('posts');
-			$table->unsignedBigInteger('comment_id')->nullable();
-			$table->foreign('comment_id')->references('id')->on('comments');
 			$table->unsignedBigInteger('user_id');
 			$table->foreign('user_id')->references('id')->on('users');
 		});
@@ -166,11 +162,7 @@ class CreateRelationshipRules extends Migration
 		});
 		
 		Schema::table('comments', function (Blueprint $table) {
-			$table->dropForeign(['post_id']);
-			$table->dropForeign(['comment_id']);
 			$table->dropForeign(['user_id']);
-			$table->dropColumn('post_id');
-			$table->dropColumn('comment_id');
 			$table->dropColumn('user_id');
 		});
 		

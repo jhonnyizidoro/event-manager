@@ -32,7 +32,11 @@ class UpdateUser extends FormRequest
 			'password' => 'confirmed|string|max:59|min:6',
 			'nickname' => 'string|max:255',
 			'birthdate' => 'date|date_format:d/m/Y',
-			'is_admin' => 'boolean'
+			'is_admin' => 'boolean',
+			//Preferences
+			'receive_events_email' => 'boolean',
+			'receive_events_notification' => 'boolean',
+			'events_notification_range' => 'integer|min:0',
         ];
 	}
 	
