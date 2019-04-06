@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserPreferencesTable extends Migration
+class CreateUserStaffTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateUserPreferencesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_preferences', function (Blueprint $table) {
+        Schema::create('user_staff', function (Blueprint $table) {
             $table->bigIncrements('id');
-			$table->boolean('receive_events_email')->default(false);
-			$table->boolean('receive_events_notification')->default(false);
-			$table->integer('events_notification_range')->default(50);
         });
     }
 
@@ -28,6 +25,6 @@ class CreateUserPreferencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_preferences');
+        Schema::dropIfExists('user_staff');
     }
 }

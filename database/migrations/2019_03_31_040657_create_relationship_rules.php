@@ -45,6 +45,13 @@ class CreateRelationshipRules extends Migration
 			$table->unsignedBigInteger('event_id');
 			$table->foreign('event_id')->references('id')->on('events');
 		});
+
+		Schema::table('event_staff', function (Blueprint $table) {
+			$table->unsignedBigInteger('event_id');
+			$table->foreign('event_id')->references('id')->on('events');
+			$table->unsignedBigInteger('staff_id');
+			$table->foreign('staff_id')->references('id')->on('staff');
+		});
 		
 		Schema::table('events', function (Blueprint $table) {
 			$table->unsignedBigInteger('user_id')->nullable();
@@ -55,8 +62,6 @@ class CreateRelationshipRules extends Migration
 			$table->foreign('address_id')->references('id')->on('addresses');
 			$table->unsignedBigInteger('category_id');
 			$table->foreign('category_id')->references('id')->on('categories');
-			$table->unsignedBigInteger('organization_id');
-			$table->foreign('organization_id')->references('id')->on('organizations');
 		});
 		
 		Schema::table('follows', function (Blueprint $table) {
@@ -74,14 +79,14 @@ class CreateRelationshipRules extends Migration
 			$table->foreign('user_id')->references('id')->on('users');
 		});
 		
-		Schema::table('organization_users', function (Blueprint $table) {
+		Schema::table('user_staff', function (Blueprint $table) {
 			$table->unsignedBigInteger('user_id');
 			$table->foreign('user_id')->references('id')->on('users');
-			$table->unsignedBigInteger('organization_id');
-			$table->foreign('organization_id')->references('id')->on('organizations');
+			$table->unsignedBigInteger('staff_id');
+			$table->foreign('staff_id')->references('id')->on('staff');
 		});
 		
-		Schema::table('organizations', function (Blueprint $table) {
+		Schema::table('staff', function (Blueprint $table) {
 			$table->unsignedBigInteger('user_id');
 			$table->foreign('user_id')->references('id')->on('users');
 		});
@@ -172,18 +177,23 @@ class CreateRelationshipRules extends Migration
 			$table->dropColumn('event_id');
 			$table->dropColumn('user_id');
 		});
+
+		Schema::table('event_staff', function (Blueprint $table) {
+			$table->dropForeign(['staff_id']);
+			$table->dropForeign(['event_id']);
+			$table->dropColumn('staff_id');
+			$table->dropColumn('event_id');
+		});
 		
 		Schema::table('events', function (Blueprint $table) {
 			$table->dropForeign(['user_id']);
 			$table->dropForeign(['event_serie_id']);
 			$table->dropForeign(['address_id']);
 			$table->dropForeign(['category_id']);
-			$table->dropForeign(['organization_id']);
 			$table->dropColumn('user_id');
 			$table->dropColumn('event_serie_id');
 			$table->dropColumn('address_id');
 			$table->dropColumn('category_id');
-			$table->dropColumn('organization_id');
 		});
 		
 		Schema::table('follows', function (Blueprint $table) {
@@ -201,14 +211,14 @@ class CreateRelationshipRules extends Migration
 			$table->dropColumn('user_id');
 		});
 		
-		Schema::table('organization_users', function (Blueprint $table) {
-			$table->dropForeign(['organization_id']);
+		Schema::table('user_staff', function (Blueprint $table) {
+			$table->dropForeign(['staff_id']);
 			$table->dropForeign(['user_id']);
-			$table->dropColumn('organization_id');
+			$table->dropColumn('staff_id');
 			$table->dropColumn('user_id');
 		});
 		
-		Schema::table('organizations', function (Blueprint $table) {
+		Schema::table('staff', function (Blueprint $table) {
 			$table->dropForeign(['user_id']);
 			$table->dropColumn('user_id');
 		});

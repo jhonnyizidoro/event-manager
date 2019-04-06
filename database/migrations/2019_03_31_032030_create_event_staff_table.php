@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrganizationUsersTable extends Migration
+class CreateEventStaffTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateOrganizationUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('organization_users', function (Blueprint $table) {
+        Schema::create('event_staff', function (Blueprint $table) {
             $table->bigIncrements('id');
         });
     }
@@ -25,6 +25,6 @@ class CreateOrganizationUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('organization_users');
+        Schema::dropIfExists('event_staff');
     }
 }
