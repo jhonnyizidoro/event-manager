@@ -26,7 +26,6 @@ class UpdateAddress extends FormRequest
     public function rules()
     {
         return [
-			'user_id' => 'required|exists:users,id',
 			'name' => 'string:max:255',
 			'street' => 'string:max:255',
 			'number' => 'string:max:255',

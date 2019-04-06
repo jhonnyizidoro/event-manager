@@ -17,7 +17,7 @@ class CheckAccountOwner
     public function handle($request, Closure $next)
     {
 		$user = JWTAuth::parseToken()->authenticate();
-		if ($user->is_admin || $request->id == $user->id) {
+		if ($user->is_admin || $request->user_id == $user->id) {
 			return $next($request);
 		}		
 		return json([], 'O usuário não tem permissão para acessar essa rota.', false, 403);

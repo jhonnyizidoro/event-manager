@@ -13,10 +13,10 @@ Route::prefix('user')->group(function() {
 	Route::get('', 'UserController@index')->middleware('admin');
 	Route::get('me', 'UserController@me')->middleware('auth');
 	Route::put('', 'UserController@update')->middleware('owner');
-	Route::delete('{id}', 'UserController@destroy')->middleware('owner');
+	Route::delete('{user_id}', 'UserController@destroy')->middleware('owner');
 });
 
-//Rotas de gerênciamento de usuários
+//Rotas de gerênciamento de endereço
 Route::prefix('address')->group(function() {
-	Route::put('', 'AddressController@update');
+	Route::put('user', 'AddressController@updateUserAddress')->middleware('owner');
 });

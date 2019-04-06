@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Webservices;
 
 use App\Http\Controllers\Controller;
 use Ixudra\Curl\Facades\Curl;
+use App\Models\Address;
 
 class GoogleController extends Controller
 {
@@ -13,11 +14,12 @@ class GoogleController extends Controller
 	 * TODO: busca a latitude e longitude baseado nos dados do endereço
 	 * @return Object com propriedade latitude e longitude ou False caso o endereço não tenha dados suficientes
 	 */
-	public static function getGeolocation($address)
+	public static function getGeolocation($request)
 	{
-		$addressParameter = self::formatAddress($address);
+		$address = new Address($request->all());
+		$address = self::formatAddress($address);
 
-		if (!$addressParameter) {
+		if (!$address) {
 			return false;
 		}
 
@@ -25,7 +27,7 @@ class GoogleController extends Controller
 		->asJson()
 		->withTimeout(2)
 		->withData([
-			'address' => $addressParameter,
+			'address' => $address,
 			'key' => env('GOOGLE_GEOCODE_KEY')
 		])
 		->get();
@@ -42,16 +44,16 @@ class GoogleController extends Controller
 	 */
 	private static function formatAddress($address)
 	{
-		$addressParameter = false;
+		$formattedAddress = false;
 
 		if ($address->zip_code) {
-			$addressParameter = "{$address->street} {$address->number} {$address->neighborhood} {$address->zip_code}";
+			$formattedAddress = "{$address->street} {$address->number} {$address->neighborhood} {$address->zip_code}";
 		}
 
 		if ($address->city_id) {
-			$addressParameter .= " {$address->city->name} {$address->city->state->code} Brasil";
+			$formattedAddress .= " {$address->city->name} {$address->city->state->code} Brasil";
 		}
 
-		return $addressParameter;
+		return $formattedAddress;
 	}
 }
