@@ -17,6 +17,7 @@ class CreateStatesTable extends Migration
             $table->bigIncrements('id');
 			$table->string('name');
 			$table->string('code');
+			$table->boolean('is_active')->default(true);
         });
     }
 
