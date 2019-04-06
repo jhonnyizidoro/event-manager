@@ -48,4 +48,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d/m/Y H:i');
 	}
+
+	public function address()
+	{
+		return $this->belongsTo('App\Models\Address');
+	}
 }

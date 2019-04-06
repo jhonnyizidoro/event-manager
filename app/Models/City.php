@@ -11,4 +11,9 @@ class City extends Model
 	protected $fillable = [
 		'name', 'state_id',
 	];
+
+	public function state()
+	{
+		return $this->belongsTo('App\Models\State');
+	}
 }
