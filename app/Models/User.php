@@ -53,4 +53,9 @@ class User extends Authenticatable implements JWTSubject
 	{
 		return $this->belongsTo('App\Models\Address');
 	}
+
+	public function preference()
+	{
+		return $this->hasOne('App\Models\UserPreference');
+	}
 }

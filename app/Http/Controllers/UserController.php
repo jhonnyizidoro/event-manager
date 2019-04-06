@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\UserPreference;
+use App\Models\UserProfile;
+use App\Models\Address;
 use App\Http\Requests\User\NewUser as NewUserRequest;
 use App\Http\Requests\User\UpdateUser as UpdateUserRequest;
 use Auth;
@@ -27,7 +29,18 @@ class UserController extends Controller
     public function store(NewUserRequest $request)
     {
 		$request->request->remove('is_admin');
+
+		//Endereço
+		$address = Address::create();
+
+		//Cria usuário e vincula endereço à ele
+		$request->request->add(['address_id' => $address->id]);
 		$user = User::create($request->all());
+
+		//Cria perfil e preferências
+		UserProfile::create(['user_id' => $user->id]);
+		UserPreference::create(['user_id' => $user->id]);
+
 		return json($user, 'Usuário Cadastrado com sucesso.');
     }
 
@@ -51,13 +64,9 @@ class UserController extends Controller
 		if (!Auth::user()->is_admin) {
 			$request->request->remove('is_admin');
 		}
-
-		$user = User::find($request->id);
+		$user = User::find($request->user_id);
 		$user->update($request->all());
-
-		$request->request->add(['user_id' => $user->id]);
-		UserPreference::updateOrCreate(['user_id' => $user->id], $request->all());
-		
+		$user->preference->update($request->all());
 		return json($user, 'Usuário atualizado com sucesso.');
     }
 
