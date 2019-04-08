@@ -9,8 +9,8 @@ Route::prefix('auth')->group(function() {
 
 //Rotas de gerênciamento de usuários
 Route::prefix('user')->group(function() {
-	Route::post('', 'UserController@store');
 	Route::get('', 'UserController@index')->middleware('admin');
+	Route::post('', 'UserController@store');
 	Route::get('me', 'UserController@me')->middleware('auth');
 	Route::put('', 'UserController@update')->middleware('owner');
 	Route::delete('{user_id}', 'UserController@destroy')->middleware('owner');
@@ -23,9 +23,17 @@ Route::prefix('address')->group(function() {
 
 //Rotas para gerenciamento das cidades
 Route::prefix('city')->group(function() {
-	Route::get('', 'CityController@index')->middleware('admin');
+	Route::get('', 'CityController@index');
 	Route::post('', 'CityController@store')->middleware('admin');
 	Route::get('{city_id}', 'CityController@show');
 	Route::put('', 'CityController@update')->middleware('admin');
 	Route::delete('{city_id}', 'CityController@destroy')->middleware('admin');
+});
+
+Route::prefix('category')->group(function() {
+	Route::get('', 'CategoryController@index');
+	Route::post('', 'CategoryController@store')->middleware('admin');
+	Route::get('{category_id}', 'CategoryController@show');
+	Route::put('', 'CategoryController@update')->middleware('admin');
+	Route::delete('{category_id}', 'CategoryController@destroy')->middleware('admin');
 });

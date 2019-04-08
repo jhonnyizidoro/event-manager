@@ -3,83 +3,63 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Http\Requests\Category\NewCategory as NewCategoryRequest;
+use App\Http\Requests\Category\UpdateCategory as UpdateCategoryRequest;
 
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Retorna um json com todas as categorias cadastradas
+     * @return Resource com todas as categorias
      */
     public function index()
     {
-        //
+		$categories = Category::get();
+		return json($categories, 'Categorias buscadas.');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Grava uma categoria
+     * @return Category categoria criada
      */
-    public function create()
+    public function store(NewCategoryRequest $request)
     {
-        //
+		$category = Category::create($request->all());
+		return json($category, 'Categoria criada.');
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Busca uma categoria
+     * @param int $id da categoria que será buscada
+	 * @return Resource categoria buscada
      */
-    public function store(Request $request)
+    public function show($id)
     {
-        //
+		$category = Category::findOrFail($id);
+		return json($category, 'Categoria encontrada.');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * Atualiza uma categoria
+     * @return Category a categoria atualizada
      */
-    public function show(Category $category)
+    public function update(UpdateCategoryRequest $request)
     {
-        //
+		$category = Category::find($request->id);
+		$category->update($request->all());
+		return json($category, 'Categoria atualizada.');
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * Ativa ou desativa uma categoria
+	 * @return Category: categoria ativada/desativada
      */
-    public function edit(Category $category)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Category $category)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Category $category)
-    {
-        //
+        $category = Category::findOrFail($id);
+		$category->update([
+			'is_active' => !$category->is_active
+		]);
+        return json($category, 'Categoria ativada/desativada.');
     }
 }
