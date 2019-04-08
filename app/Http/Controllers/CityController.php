@@ -47,7 +47,7 @@ class CityController extends Controller
      */
     public function update(UpdateCityRequest $request)
     {
-		$city = City::find($request->id);
+		$city = City::find($request->city_id);
 		$city->update($request->all());
 		$city = new CityResource($city);
         return json($city, 'Cidade atualizada.');

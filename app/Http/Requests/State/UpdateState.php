@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests\State;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class NewCategory extends FormRequest
+class UpdateState extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,9 @@ class NewCategory extends FormRequest
     public function rules()
     {
         return [
-			'name' => 'required|max:255|string',
+            'state_id' => 'required|exists:states,id',
+			'name' => 'max:255|string',
+			'code' => 'max:255|string',
         ];
 	}
 	

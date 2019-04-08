@@ -9,6 +9,11 @@ class State extends Model
 	public $timestamps = false;
 	
 	protected $fillable = [
-		'name', 'code',
+		'name', 'code', 'is_active'
 	];
+
+	public function cities()
+	{
+		return $this->hasMany('App\Models\City');
+	}
 }

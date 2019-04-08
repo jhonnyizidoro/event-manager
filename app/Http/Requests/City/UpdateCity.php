@@ -26,7 +26,7 @@ class UpdateCity extends FormRequest
     public function rules()
     {
         return [
-			'id' => 'required|exists:cities',
+			'city_id' => 'required|exists:cities,id',
 			'name' => 'string|max:255',
 			'state_id' => 'exists:states,id'
         ];

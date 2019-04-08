@@ -3,83 +3,63 @@
 namespace App\Http\Controllers;
 
 use App\Models\State;
-use Illuminate\Http\Request;
+use App\Http\Requests\State\NewState as NewStateRequest;
+use App\Http\Requests\State\UpdateState as UpdateStateRequest;
 
 class StateController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Mostra os estados cadastrados
+     * @return Resource lista de todos os estados cadastrados
      */
     public function index()
     {
-        //
+		$states = State::paginate(10);
+		return json($states, 'Estados buscados.');
+	}
+
+    /**
+     * Cria um novo estado
+     * @return State estado que foi criado
+     */
+    public function store(NewStateRequest $request)
+    {
+		$state = State::create($request->all());
+		return json($state, 'Estado criado.');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Mostra um estado e suas cidades
+     * @return Resource com um estados e suas respectivas cidades
      */
-    public function create()
+    public function show($id)
     {
-        //
+		$state = State::findOrFail($id);
+		$state->cities = $state->cities;
+		return json($state, 'Estado encontrado.');
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Atualiza um estado
+     * @return State estado atualizado
      */
-    public function store(Request $request)
+    public function update(UpdateStateRequest $request)
     {
-        //
+		$state = State::find($request->state_id);
+		$state->update($request->all());
+		return json($state, 'Estado atualizado.');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\State  $state
-     * @return \Illuminate\Http\Response
+     * Ativa ou desativa um estado
+	 * @return State: estado ativado/desativado
      */
-    public function show(State $state)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\State  $state
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(State $state)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\State  $state
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, State $state)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\State  $state
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(State $state)
-    {
-        //
+		$state = State::findOrFail($id);
+		$state->update([
+			'is_active' => !$state->is_active
+		]);
+        return json($state, 'Estado ativado/desativado.');
     }
 }

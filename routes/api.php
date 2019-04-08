@@ -30,6 +30,16 @@ Route::prefix('city')->group(function() {
 	Route::delete('{city_id}', 'CityController@destroy')->middleware('admin');
 });
 
+//Rotas para gerenciamento de estados
+Route::prefix('state')->group(function() {
+	Route::get('', 'StateController@index');
+	Route::post('', 'StateController@store')->middleware('admin');
+	Route::get('{state_id}', 'StateController@show');
+	Route::put('', 'StateController@update')->middleware('admin');
+	Route::delete('{state_id}', 'StateController@destroy')->middleware('admin');
+});
+
+//Rotas para gerenciamento das categorias
 Route::prefix('category')->group(function() {
 	Route::get('', 'CategoryController@index');
 	Route::post('', 'CategoryController@store')->middleware('admin');
