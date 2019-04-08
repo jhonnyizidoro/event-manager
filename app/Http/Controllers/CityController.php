@@ -3,83 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
-use Illuminate\Http\Request;
+use App\Http\Resources\City as CityResource;
+use App\Http\Requests\City\NewCity as NewCityRequest;
+use App\Http\Requests\City\UpdateCity as UpdateCityRequest;
 
 class CityController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return Resource paginação de todas as cidades
      */
     public function index()
     {
-        //
+		$cities = City::paginate(10);
+		$cities = CityResource::collection($cities);
+		return json($cities, 'Sucesso ao buscar as cidades');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * TODO: insere uma cidade
+     * @return City cidade inserida
      */
-    public function create()
+    public function store(NewCityRequest $request)
     {
-        //
+		$city = City::create($request->all());
+		$city = new CityResource($city);
+		return json($city, 'Cidade inserida com sucesso.');
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Busca uma cidade
+     * @return CityResource cidade encontrada
      */
-    public function store(Request $request)
+    public function show($id)
     {
-        //
+		$city = City::findOrFail($id);
+		$city = new CityResource($city);
+		return json($city, 'Cidade encontrada.');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\City  $city
-     * @return \Illuminate\Http\Response
+     * Atualiza uma cidade
+     * @return CityResource cidade atualizada
      */
-    public function show(City $city)
+    public function update(UpdateCityRequest $request)
     {
-        //
+		$city = City::find($request->id);
+		$city->update($request->all());
+		$city = new CityResource($city);
+        return json($city, 'Cidade atualizada.');
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\City  $city
-     * @return \Illuminate\Http\Response
+     * Ativa ou desativa uma cidade
+	 * @return CityResource: cidade ativada/desativada
      */
-    public function edit(City $city)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\City  $city
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, City $city)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\City  $city
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(City $city)
-    {
-        //
+		$city = City::findOrFail($id);
+		$city->update([
+			'is_active' => !$city->is_active
+		]);
+		$city = new CityResource($city);
+        return json($city, 'Cidade ativada/desativada.');
     }
 }

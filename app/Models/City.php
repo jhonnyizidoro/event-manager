@@ -9,7 +9,7 @@ class City extends Model
 	public $timestamps = false;
 	
 	protected $fillable = [
-		'name', 'state_id',
+		'name', 'state_id', 'is_active'
 	];
 
 	public function state()

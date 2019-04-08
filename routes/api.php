@@ -20,3 +20,12 @@ Route::prefix('user')->group(function() {
 Route::prefix('address')->group(function() {
 	Route::put('user', 'AddressController@updateUserAddress')->middleware('owner');
 });
+
+//Rotas para gerenciamento das cidades
+Route::prefix('city')->group(function() {
+	Route::get('', 'CityController@index')->middleware('admin');
+	Route::post('', 'CityController@store')->middleware('admin');
+	Route::get('{city_id}', 'CityController@show');
+	Route::put('', 'CityController@update')->middleware('admin');
+	Route::delete('{city_id}', 'CityController@destroy')->middleware('admin');
+});
