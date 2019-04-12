@@ -26,12 +26,12 @@ class UpdateAddress extends FormRequest
     public function rules()
     {
         return [
-			'name' => 'string:max:255',
-			'street' => 'string:max:255',
-			'number' => 'string:max:255',
+			'name' => 'string:max:191',
+			'street' => 'string:max:191',
+			'number' => 'string:max:191',
 			'zip_code' => 'regex:/[0-9]{5}-[0-9]{3}/',
-			'neighborhood' => 'string:max:255',
-			'complement' => 'string:max:255',
+			'neighborhood' => 'string:max:191',
+			'complement' => 'string:max:191',
 			'city_id' => 'exists:cities,id',
         ];
 	}

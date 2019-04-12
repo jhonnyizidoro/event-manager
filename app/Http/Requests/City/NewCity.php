@@ -26,7 +26,7 @@ class NewCity extends FormRequest
     public function rules()
     {
         return [
-			'name' => 'required|max:255|string',
+			'name' => 'required|max:191|string',
 			'state_id' => 'required|exists:states,id'
         ];
 	}

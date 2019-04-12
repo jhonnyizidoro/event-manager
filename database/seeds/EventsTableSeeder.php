@@ -18,6 +18,7 @@ class EventsTableSeeder extends Seeder
 			'ends_at' => date('Y-m-d 14:00'),
 			'user_id' => 1,
 			'category_id' => 1,
+			'address_id' => 1,
 		]);
     }
 }

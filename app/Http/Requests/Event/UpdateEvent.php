@@ -27,7 +27,7 @@ class UpdateEvent extends FormRequest
     {
         return [
 			'event_id' => 'required|exists:events,id',
-			'name' => 'string|max:255',
+			'name' => 'string|max:191',
 			'description' => 'string',
 			'cover' => 'image|max:2048',
 			'starts_at' => 'date_format:Y-m-d H:i',

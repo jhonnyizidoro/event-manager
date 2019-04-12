@@ -27,10 +27,10 @@ class UpdateUser extends FormRequest
     {
 		return [
 			'user_id' => 'required|exists:users,id',
-			'name' => 'string|max:255',
-			'email' => 'email|max:255|unique:users',
+			'name' => 'string|max:191',
+			'email' => 'email|max:191|unique:users',
 			'password' => 'confirmed|string|max:59|min:6',
-			'nickname' => 'string|max:255',
+			'nickname' => 'string|max:191',
 			'birthdate' => 'date|date_format:d/m/Y',
 			'is_admin' => 'boolean',
 			//Preferences

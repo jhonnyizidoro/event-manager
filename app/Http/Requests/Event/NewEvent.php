@@ -26,7 +26,7 @@ class NewEvent extends FormRequest
     public function rules()
     {
         return [
-			'name' => 'required|string|max:255',
+			'name' => 'required|string|max:191',
 			'description' => 'string',
 			'cover' => 'image|max:2048',
 			'starts_at' => 'required|date_format:Y-m-d H:i',

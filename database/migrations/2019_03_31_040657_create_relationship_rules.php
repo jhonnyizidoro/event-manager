@@ -143,7 +143,7 @@ class CreateRelationshipRules extends Migration
 		
 		Schema::table('certificates', function (Blueprint $table) {
 			$table->dropForeign(['event_id']);
-			$table->dropForeign(['user_id']);
+			$table->dropColumn('event_id');
 		});
 		
 		Schema::table('cities', function (Blueprint $table) {

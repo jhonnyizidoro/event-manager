@@ -27,7 +27,7 @@ class UpdateCertificate extends FormRequest
     {
         return [
 			'event_id' => 'required|exists:events,id',
-			'signature_name' => 'required|string|max:255',
+			'signature_name' => 'required|string|max:191',
 			'signature_image' => 'required|image|max:2048',
 			'logo' => 'image|max:2048'
         ];

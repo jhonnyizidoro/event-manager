@@ -27,8 +27,8 @@ class UpdateState extends FormRequest
     {
         return [
             'state_id' => 'required|exists:states,id',
-			'name' => 'max:255|string',
-			'code' => 'max:255|string',
+			'name' => 'max:191|string',
+			'code' => 'max:191|string',
         ];
 	}
 	
