@@ -15,6 +15,6 @@ if (!function_exists('json'))
 			'http_code' => $httpCode,
 			'message' => $mensagemDeRetorno,
 			'data' => $retorno
-		], $httpCode);
+		], $httpCode, [], JSON_UNESCAPED_SLASHES);
 	}
 }

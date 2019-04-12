@@ -19,8 +19,8 @@ class CreateRelationshipRules extends Migration
 		});
 		
 		Schema::table('certificates', function (Blueprint $table) {
-			$table->unsignedBigInteger('user_id');
-			$table->foreign('user_id')->references('id')->on('users');
+			$table->unsignedBigInteger('event_id');
+			$table->foreign('event_id')->references('id')->on('events');
 		});
 		
 		Schema::table('cities', function (Blueprint $table) {
@@ -48,11 +48,11 @@ class CreateRelationshipRules extends Migration
 		});
 		
 		Schema::table('events', function (Blueprint $table) {
-			$table->unsignedBigInteger('user_id')->nullable();
+			$table->unsignedBigInteger('user_id');
 			$table->foreign('user_id')->references('id')->on('users');
 			$table->unsignedBigInteger('event_serie_id')->nullable();
 			$table->foreign('event_serie_id')->references('id')->on('event_series');
-			$table->unsignedBigInteger('address_id');
+			$table->unsignedBigInteger('address_id')->nullable();
 			$table->foreign('address_id')->references('id')->on('addresses');
 			$table->unsignedBigInteger('category_id');
 			$table->foreign('category_id')->references('id')->on('categories');

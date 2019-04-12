@@ -20,7 +20,7 @@ class CreateEventsTable extends Migration
 			$table->string('cover')->nullable();
 			$table->timestamp('starts_at');
 			$table->timestamp('ends_at');
-			$table->boolean('is_certified');
+			$table->boolean('is_certified')->default(false);
 			$table->boolean('is_active')->default(true);
 			$table->integer('min_age')->nullable();
             $table->timestamps();

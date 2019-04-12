@@ -15,7 +15,6 @@ class CreateCertificatesTable extends Migration
     {
         Schema::create('certificates', function (Blueprint $table) {
 			$table->bigIncrements('id');
-			$table->string('hash');
 			$table->string('logo')->nullable();
 			$table->string('signature_name');
 			$table->string('signature_image');

@@ -3,83 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\Certificate;
-use Illuminate\Http\Request;
+use App\Models\Event;
+use App\Helpers\File;
+use App\Http\Requests\Certificate\UpdateCertificate as UpdateCertificateRequest;
+use Auth;
 
 class CertificateController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Mostra a lista de certificados do usuário logado
      */
     public function index()
     {
-        //
+		$certificates = Auth::user()->certificates()->get();
+		return json($certificates, 'Certificados encontrados.');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Cria um novo certificado ou atualiza o certificado do evento
+     * @return Resource com o certificado criado
      */
-    public function create()
+    public function update(UpdateCertificateRequest $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Certificate  $certificate
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Certificate $certificate)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Certificate  $certificate
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Certificate $certificate)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Certificate  $certificate
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Certificate $certificate)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Certificate  $certificate
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Certificate $certificate)
-    {
-        //
+		$event = Event::find($request->event_id);
+		$data = $request->all();
+		$data['signature_image'] = File::upload($request->signature_image, 'certificate/signatures');
+		$data['logo'] = File::upload($request->logo, 'certificate/logos');
+		$certificate = Certificate::updateOrCreate(['event_id' => $event->id], $data);
+		return json($certificate, 'Certificado criado.');
     }
 }

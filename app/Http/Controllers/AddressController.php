@@ -10,28 +10,7 @@ use Auth;
 class AddressController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Address  $address
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Address $address)
-    {
-        //
-    }
-
-    /**
-	 * TODO: Cria/atualiza uma preferência do usuário
+	 * TODO: atualiza um endereço
 	 * TODO: se existir id da cidade busca as geolocalizações
 	 * @return Resource: endereço
      */

@@ -47,3 +47,9 @@ Route::prefix('category')->group(function() {
 	Route::put('', 'CategoryController@update')->middleware('admin');
 	Route::delete('{category_id}', 'CategoryController@destroy')->middleware('admin');
 });
+
+//Rotdas para gerenciamentos de certificados
+Route::prefix('certificate')->group(function() {
+	Route::get('', 'CertificateController@index')->middleware('auth');
+	Route::post('', 'CertificateController@update')->middleware('auth');
+});
