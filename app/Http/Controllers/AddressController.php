@@ -19,7 +19,7 @@ class AddressController extends Controller
 		$user = Auth::user();
 		$geolocation = GoogleController::getGeolocation($request);
 		if ($geolocation) {
-			$request->request->add([
+			$request->merge([
 				'latitude' => $geolocation->latitude,
 				'longitude' => $geolocation->longitude,
 			]);

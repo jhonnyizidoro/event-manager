@@ -12,13 +12,13 @@ Route::prefix('user')->group(function() {
 	Route::get('', 'UserController@index')->middleware('admin');
 	Route::post('', 'UserController@store');
 	Route::get('me', 'UserController@me')->middleware('auth');
-	Route::put('', 'UserController@update')->middleware('owner');
-	Route::delete('{user_id}', 'UserController@destroy')->middleware('owner');
+	Route::put('', 'UserController@update')->middleware('auth');
+	Route::delete('{user_id}', 'UserController@destroy')->middleware('auth');
 });
 
 //Rotas de gerênciamento de endereço
 Route::prefix('address')->group(function() {
-	Route::put('user', 'AddressController@updateUserAddress')->middleware('owner');
+	Route::put('user', 'AddressController@updateUserAddress')->middleware('auth');
 });
 
 //Rotas para gerenciamento das cidades
@@ -47,6 +47,16 @@ Route::prefix('category')->group(function() {
 	Route::put('', 'CategoryController@update')->middleware('admin');
 	Route::delete('{category_id}', 'CategoryController@destroy')->middleware('admin');
 });
+
+//Rotas de gerênciamento de eventos
+Route::prefix('event')->group(function() {
+	Route::get('', 'EventController@index')->middleware('auth');
+	Route::post('', 'EventController@store')->middleware('auth');
+	Route::get('{event_id}', 'EventController@show');
+	Route::post('update', 'EventController@update')->middleware('auth');
+	Route::delete('{event_id}', 'EventController@destroy')->middleware('auth');
+});
+
 
 //Rotdas para gerenciamentos de certificados
 Route::prefix('certificate')->group(function() {

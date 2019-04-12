@@ -52,7 +52,7 @@ class CreateRelationshipRules extends Migration
 			$table->foreign('user_id')->references('id')->on('users');
 			$table->unsignedBigInteger('event_serie_id')->nullable();
 			$table->foreign('event_serie_id')->references('id')->on('event_series');
-			$table->unsignedBigInteger('address_id')->nullable();
+			$table->unsignedBigInteger('address_id');
 			$table->foreign('address_id')->references('id')->on('addresses');
 			$table->unsignedBigInteger('category_id');
 			$table->foreign('category_id')->references('id')->on('categories');

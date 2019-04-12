@@ -14,4 +14,11 @@ class Event extends Model
 	{
 		return $this->hasOne('App\Models\Certificate');
 	}
+
+	public function getCoverAttribute($image)
+    {
+		if ($image) {
+			return env('AWS_URL') . $image;
+		}
+	}
 }

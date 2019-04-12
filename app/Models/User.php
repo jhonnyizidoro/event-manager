@@ -63,4 +63,9 @@ class User extends Authenticatable implements JWTSubject
 	{
 		return $this->belongsToMany('App\Models\Certificate', 'user_certificates');
 	}
+
+	public function events()
+	{
+		return $this->hasMany('App\Models\Event');
+	}
 }

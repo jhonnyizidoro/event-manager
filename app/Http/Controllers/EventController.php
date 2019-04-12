@@ -2,84 +2,82 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Event\NewEvent as NewEventRequest;
+use App\Http\Requests\Event\UpdateEvent as UpdateEventRequest;
+use App\Helpers\File;
+use App\Models\Address;
 use App\Models\Event;
-use Illuminate\Http\Request;
+use Auth;
 
 class EventController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Lista todos os eventos do usuário logado.
+     * @return EventResource eventos do usuário logado
      */
     public function index()
     {
-        //
+		$events = Auth::user()->events;
+		return json($events, 'Eventos buscados.');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Cria um evento e vincula um endereço à ele
+     * @return Resource evento criado
      */
-    public function create()
+    public function store(NewEventRequest $request)
     {
-        //
+		$data = $request->all();
+		$data['user_id'] = Auth::user()->id;
+		$data['cover'] = File::upload($request->cover, 'event/cover');
+
+        //Endereço
+		$address = Address::create();
+
+		//Cria evento e vincula endereço à ele
+		$data['address_id'] = $address->id;
+		$event = Event::create($data);
+
+		return json($event, 'Evento criado com sucesso.'); 
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * TODO: busca um evento usando o id
+     * @return Resource evento buscado
      */
-    public function store(Request $request)
+    public function show($id)
     {
-        //
+		$event = Event::findOrFail($id);
+		return json($event, 'Evento encontrado.');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
+     * TODO: atualiza um evento
+     * @return Resource evento atualizado
      */
-    public function show(Event $event)
+    public function update(UpdateEventRequest $request)
     {
-        //
+		$event = Event::find($request->event_id);
+		$data = $request->all();
+
+		if ($request->cover) {
+			$data['cover'] = File::upload($request->cover, 'event/cover');
+		}
+
+		$event->update($data);
+		return json($event, 'Evento atualizado');
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
+     * Ativa ou desativa um evento
+	 * @return Resource: evento ativado/desativado
      */
-    public function edit(Event $event)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Event $event)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Event $event)
-    {
-        //
+		$event = Event::findOrFail($id);
+		$event->update([
+			'is_active' => !$event->is_active
+		]);
+		return json($event, 'Evento ativado/desativado com sucesso.');
     }
 }

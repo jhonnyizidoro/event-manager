@@ -34,7 +34,7 @@ class UserController extends Controller
 		$address = Address::create();
 
 		//Cria usuário e vincula endereço à ele
-		$request->request->add(['address_id' => $address->id]);
+		$request->merge(['address_id' => $address->id]);
 		$user = User::create($request->all());
 
 		//Cria perfil e preferências
