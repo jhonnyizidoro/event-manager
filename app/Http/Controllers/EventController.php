@@ -27,16 +27,15 @@ class EventController extends Controller
      */
     public function store(NewEventRequest $request)
     {
-		$data = $request->all();
-		$data['user_id'] = Auth::user()->id;
-		$data['cover'] = File::uploadBase64($request->cover, 'event/cover');
-
+		$request->merge([
+			'user_id' => Auth::user()->id,
+			'cover' => File::uploadBase64($request->cover, 'event/cover')
+		]);
         //Endereço
 		$address = Address::create();
-
 		//Cria evento e vincula endereço à ele
-		$data['address_id'] = $address->id;
-		$event = Event::create($data);
+		$request->merge(['address_id' => $address->id]);
+		$event = Event::create($request->all());
 
 		return json($event, 'Evento criado com sucesso.'); 
     }
@@ -58,13 +57,10 @@ class EventController extends Controller
     public function update(UpdateEventRequest $request)
     {
 		$event = Event::find($request->event_id);
-		$data = $request->all();
-
 		if ($request->cover) {
-			$data['cover'] = File::uploadBase64($request->cover, 'event/cover');
+			$request->merge(['cover' => File::uploadBase64($request->cover, 'event/cover')]);
 		}
-
-		$event->update($data);
+		$event->update($request->all());
 		return json($event, 'Evento atualizado');
     }
 

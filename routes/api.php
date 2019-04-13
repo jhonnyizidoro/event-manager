@@ -58,9 +58,23 @@ Route::prefix('event')->group(function() {
 	Route::delete('{event_id}', 'EventController@destroy')->middleware('auth');
 });
 
-
 //Rotdas para gerenciamentos de certificados
 Route::prefix('certificate')->group(function() {
 	Route::get('', 'CertificateController@index')->middleware('auth');
 	Route::put('', 'CertificateController@update')->middleware('auth');
+});
+
+//Rotas para gerenciamento de equipes de administradores
+Route::prefix('state')->group(function() {
+	Route::get('', 'StateController@index');
+	Route::post('', 'StateController@store')->middleware('admin');
+	Route::get('{state_id}', 'StateController@show');
+	Route::put('', 'StateController@update')->middleware('admin');
+	Route::delete('{state_id}', 'StateController@destroy')->middleware('admin');
+});
+
+Route::prefix('staff')->group(function() {
+	Route::get('', 'StaffController@index')->middleware('auth');
+	Route::post('', 'StaffController@store')->middleware('auth');
+	Route::delete('{staff_id}', 'StaffController@destroy')->middleware('auth');
 });

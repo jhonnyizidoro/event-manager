@@ -68,4 +68,9 @@ class User extends Authenticatable implements JWTSubject
 	{
 		return $this->hasMany('App\Models\Event');
 	}
+
+	public function staff()
+	{
+		return $this->hasMany('App\Models\Staff');
+	}
 }

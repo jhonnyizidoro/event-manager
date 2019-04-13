@@ -28,14 +28,12 @@ class UserController extends Controller
      */
     public function store(NewUserRequest $request)
     {
-		$request->request->remove('is_admin');
-
 		//Endereço
 		$address = Address::create();
 
 		//Cria usuário e vincula endereço à ele
 		$request->merge(['address_id' => $address->id]);
-		$user = User::create($request->all());
+		$user = User::create($request->except(['is_admin']));
 
 		//Cria perfil e preferências
 		UserProfile::create(['user_id' => $user->id]);
@@ -62,7 +60,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request)
     {
 		if (!Auth::user()->is_admin) {
-			$request->request->remove('is_admin');
+			$request->offsetUnset('is_admin');
 		}
 		$user = User::find($request->user_id);
 		$user->update($request->all());

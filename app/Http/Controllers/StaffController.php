@@ -3,83 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Models\Staff;
-use Illuminate\Http\Request;
+use App\Http\Requests\Staff\NewStaff as NewStaffRequest;
+use Auth;
 
 class StaffController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * TODO: lista as equipes de administradores do usuário logado
+     * @return Resource equipes encontradas
      */
     public function index()
     {
-        //
+		$staff = Auth::user()->staff;
+		return json($staff, 'Busca realizada.');
+    }
+
+
+    /**
+     * TODO: cria uma nova equipe de administradores
+     * @return Resource equipe criada
+     */
+    public function store(NewStaffRequest $request)
+    {
+		$request->merge(['user_id' => Auth::user()->id]);
+		$staff = Staff::create($request->all());
+		return json($staff, 'Equipe de administradores criada.');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Ativa ou desativa uma equipe de administrador
+	 * @return Resource: equipe ativada/desativada
      */
-    public function create()
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Staff  $staff
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Staff $staff)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Staff  $staff
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Staff $staff)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Staff  $staff
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Staff $staff)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Staff  $staff
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Staff $staff)
-    {
-        //
+		$staff = Staff::findOrFail($id);
+		$staff->update([
+			'is_active' => !$staff->is_active
+		]);
+		return json($staff, 'Equipe ativada/desativada com sucesso.');
     }
 }
