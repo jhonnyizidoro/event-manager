@@ -29,7 +29,7 @@ class EventController extends Controller
     {
 		$data = $request->all();
 		$data['user_id'] = Auth::user()->id;
-		$data['cover'] = File::upload($request->cover, 'event/cover');
+		$data['cover'] = File::uploadBase64($request->cover, 'event/cover');
 
         //Endereço
 		$address = Address::create();
@@ -61,7 +61,7 @@ class EventController extends Controller
 		$data = $request->all();
 
 		if ($request->cover) {
-			$data['cover'] = File::upload($request->cover, 'event/cover');
+			$data['cover'] = File::uploadBase64($request->cover, 'event/cover');
 		}
 
 		$event->update($data);

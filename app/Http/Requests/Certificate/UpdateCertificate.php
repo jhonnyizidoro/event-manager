@@ -5,6 +5,7 @@ namespace App\Http\Requests\Certificate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use App\Rules\Base64Image;
 
 class UpdateCertificate extends FormRequest
 {
@@ -28,8 +29,8 @@ class UpdateCertificate extends FormRequest
         return [
 			'event_id' => 'required|exists:events,id',
 			'signature_name' => 'required|string|max:191',
-			'signature_image' => 'required|image|max:2048',
-			'logo' => 'image|max:2048'
+			'signature_image' => ['required', new Base64Image],
+			'logo' => new Base64Image,
         ];
 	}
 	

@@ -5,6 +5,7 @@ namespace App\Http\Requests\Event;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use App\Rules\Base64Image;
 
 class UpdateEvent extends FormRequest
 {
@@ -29,7 +30,7 @@ class UpdateEvent extends FormRequest
 			'event_id' => 'required|exists:events,id',
 			'name' => 'string|max:191',
 			'description' => 'string',
-			'cover' => 'image|max:2048',
+			'cover' => new Base64Image,
 			'starts_at' => 'date_format:Y-m-d H:i',
 			'ends_at' => 'date_format:Y-m-d H:i',
 			'is_certified' => 'boolean',

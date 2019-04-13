@@ -27,8 +27,8 @@ class CertificateController extends Controller
     {
 		$event = Event::find($request->event_id);
 		$data = $request->all();
-		$data['signature_image'] = File::upload($request->signature_image, 'certificate/signatures');
-		$data['logo'] = File::upload($request->logo, 'certificate/logos');
+		$data['signature_image'] = File::uploadBase64($request->signature_image, 'certificate/signatures');
+		$data['logo'] = File::uploadBase64($request->logo, 'certificate/logos');
 		$certificate = Certificate::updateOrCreate(['event_id' => $event->id], $data);
 		return json($certificate, 'Certificado criado.');
     }

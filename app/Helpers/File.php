@@ -18,7 +18,7 @@ class File
 	{
 		if (!$file) {
 			return $file;
-		}
+		}	
 		$name = self::sanitizeFileName($file->getClientOriginalName());
 		$name = "{$directory}/".date("Y-m-d_H-i-s_").$name;
 		$file = LaravelFile::get($file);
@@ -26,6 +26,25 @@ class File
 		return $name;
 	}
 
+	/**
+	* Faz o upload de um arquivo em base64
+	* @param String $file é a String no formato base64 URL -> data:image/png;base64,........
+	* @param String o segundo parâmetro é a pasta que o arquivo vai ficar, por default é images, pois é o mais usado
+	* @return String localização do arquivo no storage
+	*/
+	public static function uploadBase64($file, $directory)
+	{
+		if (!$file) {
+			return $file;
+		}
+		$explode = explode(',', $file);
+		$format = str_replace(['data:image/', ';', 'base64'], ['', '', ''], $explode[0]);
+		$file = base64_decode($explode[1]);
+		$name = "{$directory}/".date("Y-m-d_H-i-s_").uniqid().'.'.$format;
+		Storage::put($name, $file);
+		return $name;
+	}
+	
 	/**
 	* Converte o nome do arquivo arquivo para um nome sem caracteres especiais e espaços
 	* @param String nome do arquivo com extensão
@@ -41,7 +60,7 @@ class File
 		$name = self::slugify($name);
 		return $name.'.'.$extension;
 	}
-
+	
 	/**
 	* Converte uma string em um formato que seja uma URL browser friendly
 	* @param String texto original
@@ -57,7 +76,7 @@ class File
 		$text = strtolower($text);
 		return $text;
 	}
-
+	
 	/**
 	* Gera uma string aleatória com os carecteres setados
 	* @param int recebe o tamanho da String, por default é 8

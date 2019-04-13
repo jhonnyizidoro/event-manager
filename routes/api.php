@@ -53,7 +53,7 @@ Route::prefix('event')->group(function() {
 	Route::get('', 'EventController@index')->middleware('auth');
 	Route::post('', 'EventController@store')->middleware('auth');
 	Route::get('{event_id}', 'EventController@show');
-	Route::post('update', 'EventController@update')->middleware('auth');
+	Route::put('', 'EventController@update')->middleware('auth');
 	Route::delete('{event_id}', 'EventController@destroy')->middleware('auth');
 });
 
@@ -61,5 +61,5 @@ Route::prefix('event')->group(function() {
 //Rotdas para gerenciamentos de certificados
 Route::prefix('certificate')->group(function() {
 	Route::get('', 'CertificateController@index')->middleware('auth');
-	Route::post('', 'CertificateController@update')->middleware('auth');
+	Route::put('', 'CertificateController@update')->middleware('auth');
 });
