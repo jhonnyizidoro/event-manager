@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class UpdateAddress extends FormRequest
+class UpdateEventAddress extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,6 +26,7 @@ class UpdateAddress extends FormRequest
     public function rules()
     {
         return [
+			'event_id' => 'required|exists:events,id',
 			'name' => 'string:max:191',
 			'street' => 'string:max:191',
 			'number' => 'string:max:191',

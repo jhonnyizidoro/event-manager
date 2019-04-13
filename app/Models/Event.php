@@ -21,4 +21,9 @@ class Event extends Model
 			return env('AWS_URL') . $image;
 		}
 	}
+
+	public function address()
+	{
+		return $this->belongsTo('App\Models\Address');
+	}
 }

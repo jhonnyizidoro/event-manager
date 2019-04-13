@@ -19,6 +19,7 @@ Route::prefix('user')->group(function() {
 //Rotas de gerênciamento de endereço
 Route::prefix('address')->group(function() {
 	Route::put('user', 'AddressController@updateUserAddress')->middleware('auth');
+	Route::put('event', 'AddressController@updateEventAddress')->middleware('auth');
 });
 
 //Rotas para gerenciamento das cidades
