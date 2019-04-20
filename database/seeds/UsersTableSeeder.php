@@ -25,5 +25,14 @@ class UsersTableSeeder extends Seeder
 			'birthdate' => '1997-01-06',
 			'address_id' => 1
 		]);
+
+		$user = User::create([
+			'name' => 'Matheus Xavier',
+			'email' => 'matheus@email.com',
+			'password' => '123456',
+			'nickname' => 'Matheus',
+			'birthdate' => '1997-10-31',
+			'address_id' => 1
+		]);
     }
 }
