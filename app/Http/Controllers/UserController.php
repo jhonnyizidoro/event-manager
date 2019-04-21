@@ -86,4 +86,10 @@ class UserController extends Controller
 		]);
 		return json($user, 'Usuário ativado/desativado com sucesso.');
     }
+
+    public function address()
+    {
+        $address = Auth::user()->address;
+        return json($address, 'Endereço do usuário localizado.');
+    }
 }

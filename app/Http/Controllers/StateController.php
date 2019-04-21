@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\State;
+use App\Models\City;
 use App\Http\Requests\State\NewState as NewStateRequest;
 use App\Http\Requests\State\UpdateState as UpdateStateRequest;
 
@@ -61,5 +62,11 @@ class StateController extends Controller
 			'is_active' => !$state->is_active
 		]);
         return json($state, 'Estado ativado/desativado.');
+    }
+
+    public function cities($id)
+    {
+        $cities = State::findOrFail($id)->cities;
+        return json($cities, 'Cidades buscadas.');
     }
 }

@@ -14,6 +14,7 @@ Route::prefix('user')->group(function() {
 	Route::get('me', 'UserController@me')->middleware('auth');
 	Route::put('', 'UserController@update')->middleware('auth');
 	Route::delete('{user_id}', 'UserController@destroy')->middleware('auth');
+	Route::get('address', 'UserController@address')->middleware('auth');
 });
 
 //Rotas de gerênciamento de endereço
@@ -38,6 +39,7 @@ Route::prefix('state')->group(function() {
 	Route::get('{state_id}', 'StateController@show');
 	Route::put('', 'StateController@update')->middleware('admin');
 	Route::delete('{state_id}', 'StateController@destroy')->middleware('admin');
+	Route::get('{state_id}/cities', 'StateController@cities');
 });
 
 //Rotas para gerenciamento das categorias

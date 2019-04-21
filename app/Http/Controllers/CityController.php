@@ -14,8 +14,8 @@ class CityController extends Controller
      */
     public function index()
     {
-		$cities = City::paginate(10);
-		$cities = CityResource::collection($cities);
+		$cities = City::with('state')->paginate(10);
+		// $cities = CityResource::collection($cities);
 		return json($cities, 'Sucesso ao buscar as cidades');
     }
 
