@@ -66,7 +66,9 @@ class UserController extends Controller
 
         $user = User::find($request->user_id);
         $user->update($request->except(['birthdate']));
-        $user->birthdate = Carbon::createFromFormat('d/m/Y', $request->post('birthdate'))->format('Y-m-d');
+
+        if (!is_null($request->post('birthdate')))
+            $user->birthdate = Carbon::createFromFormat('d/m/Y', $request->post('birthdate'))->format('Y-m-d');
 
         if (!is_null($user->preference))
             $user->preference->update($request->all());
