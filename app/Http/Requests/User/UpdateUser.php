@@ -28,10 +28,10 @@ class UpdateUser extends FormRequest
 		return [
 			'user_id' => 'required|exists:users,id',
 			'name' => 'string|max:191',
-			'email' => 'email|max:191|unique:users',
+			'email' => 'email|max:191', // unique:users Removido pois no update a erro. Talvez nem deixar atualizar o
 			'password' => 'confirmed|string|max:59|min:6',
 			'nickname' => 'string|max:191',
-			'birthdate' => 'date|date_format:d/m/Y',
+			'birthdate' => 'date|date_format:"d/m/Y"',
 			'is_admin' => 'boolean',
 			//Preferences
 			'receive_events_email' => 'boolean',
@@ -39,7 +39,7 @@ class UpdateUser extends FormRequest
 			'events_notification_range' => 'integer|min:0',
         ];
 	}
-	
+
 	protected function failedValidation(Validator $validator)
     {
 		$response = [

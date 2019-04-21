@@ -14,7 +14,7 @@ class StateController extends Controller
      */
     public function index()
     {
-		$states = State::paginate(10);
+		$states = State::get();
 		return json($states, 'Estados buscados.');
 	}
 

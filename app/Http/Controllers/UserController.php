@@ -9,6 +9,7 @@ use App\Models\Address;
 use App\Http\Requests\User\NewUser as NewUserRequest;
 use App\Http\Requests\User\UpdateUser as UpdateUserRequest;
 use Auth;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -61,10 +62,15 @@ class UserController extends Controller
     {
 		if (!Auth::user()->is_admin) {
 			$request->offsetUnset('is_admin');
-		}
-		$user = User::find($request->user_id);
-		$user->update($request->all());
-		$user->preference->update($request->all());
+        }
+
+        $user = User::find($request->user_id);
+        $user->update($request->except(['birthdate']));
+        $user->birthdate = Carbon::createFromFormat('d/m/Y', $request->post('birthdate'))->format('Y-m-d');
+
+        if (!is_null($user->preference))
+            $user->preference->update($request->all());
+
 		return json($user, 'Usuário atualizado com sucesso.');
     }
 
