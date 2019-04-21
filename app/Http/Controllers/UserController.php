@@ -8,6 +8,7 @@ use App\Models\UserProfile;
 use App\Models\Address;
 use App\Http\Requests\User\NewUser as NewUserRequest;
 use App\Http\Requests\User\UpdateUser as UpdateUserRequest;
+use App\Http\Requests\UserProfile\UpdateUserProfile as UpdateUserProfileRequest;
 use Auth;
 use Carbon\Carbon;
 
@@ -93,5 +94,18 @@ class UserController extends Controller
     {
         $address = Auth::user()->address;
         return json($address, 'Endereço do usuário localizado.');
+    }
+
+    public function profile()
+    {
+        $profile = Auth::user()->profile;
+        return json($profile, 'Dados do perfil localizados.');
+    }
+
+    public function updateProfile(UpdateUserProfileRequest $request)
+    {
+        $profile = Auth::user()->profile;
+        $profile->update($request->all());
+        return json($profile, 'Dados do perfil atualizado com sucesso.');
     }
 }

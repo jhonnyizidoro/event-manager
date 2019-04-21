@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\UserProfile;
 
 class UsersTableSeeder extends Seeder
 {
@@ -32,7 +33,12 @@ class UsersTableSeeder extends Seeder
 			'password' => '123456',
 			'nickname' => 'Matheus',
 			'birthdate' => '1997-10-31',
-			'address_id' => 1
+			'is_admin' => true,
+			'address_id' => 2
+		]);
+
+		$profile = UserProfile::create([
+			'user_id' => $user->id
 		]);
     }
 }

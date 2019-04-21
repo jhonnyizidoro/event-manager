@@ -21,12 +21,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
 	}
-	
+
 	public function getJWTCustomClaims()
     {
         return [];
 	}
-	
+
 	public function setPasswordAttribute($password)
     {
 		$this->attributes['password'] = Hash::make($password);
@@ -43,7 +43,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d/m/Y H:i');
 	}
-	
+
 	public function getUpdatedAtAttribute($date)
     {
         return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d/m/Y H:i');
@@ -72,5 +72,10 @@ class User extends Authenticatable implements JWTSubject
 	public function staff()
 	{
 		return $this->hasMany('App\Models\Staff');
+	}
+
+	public function profile()
+	{
+		return $this->hasOne('App\Models\UserProfile');
 	}
 }

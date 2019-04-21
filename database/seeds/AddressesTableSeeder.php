@@ -21,6 +21,17 @@ class AddressesTableSeeder extends Seeder
 			'latitude' => uniqid(),
 			'longitude' => uniqid(),
 			'city_id' => 2878,
-		]);
+        ]);
+
+        Address::create([
+			'street' => 'Rua Vicente Albertino Marchalek',
+			'number' => '158',
+			'zip_code' => '81250-690',
+			'neighborhood' => 'Fazendinha',
+			'complement' => null,
+			'latitude' => uniqid(),
+			'longitude' => uniqid(),
+			'city_id' => 2878,
+        ]);
     }
 }

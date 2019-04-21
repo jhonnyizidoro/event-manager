@@ -9,4 +9,9 @@ class UserProfile extends Model
 	protected $fillable = [
 		'cover', 'picture', 'description', 'custom_url', 'user_id',
 	];
+
+	public function user()
+	{
+		return $this->belongsTo('App\Models\User');
+	}
 }

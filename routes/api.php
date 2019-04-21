@@ -15,6 +15,8 @@ Route::prefix('user')->group(function() {
 	Route::put('', 'UserController@update')->middleware('auth');
 	Route::delete('{user_id}', 'UserController@destroy')->middleware('auth');
 	Route::get('address', 'UserController@address')->middleware('auth');
+	Route::get('profile', 'UserController@profile')->middleware('auth');
+	Route::put('profile', 'UserController@updateProfile')->middleware('auth');
 });
 
 //Rotas de gerênciamento de endereço
@@ -79,4 +81,8 @@ Route::prefix('staff')->group(function() {
 	Route::get('', 'StaffController@index')->middleware('auth');
 	Route::post('', 'StaffController@store')->middleware('auth');
 	Route::delete('{staff_id}', 'StaffController@destroy')->middleware('auth');
+});
+
+Route::prefix('profile')->group(function() {
+	Route::put('', 'UserProfileController@update')->middleware('auth');
 });
