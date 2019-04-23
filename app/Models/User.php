@@ -69,7 +69,7 @@ class User extends Authenticatable implements JWTSubject
 		return $this->hasMany('App\Models\Event');
 	}
 
-	public function staff()
+	public function staffs()
 	{
 		return $this->hasMany('App\Models\Staff');
 	}
@@ -77,5 +77,10 @@ class User extends Authenticatable implements JWTSubject
 	public function profile()
 	{
 		return $this->hasOne('App\Models\UserProfile');
+	}
+
+	public function member_staffs()
+	{
+		return $this->belongsToMany('App\Models\Staff', 'user_staff', 'user_id', 'staff_id');
 	}
 }

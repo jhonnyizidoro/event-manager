@@ -108,4 +108,10 @@ class UserController extends Controller
         $profile->update($request->all());
         return json($profile, 'Dados do perfil atualizado com sucesso.');
     }
+
+    public function searchByEmail($email)
+    {
+        $users = User::where('email', 'like', "%$email%")->pluck(['id', 'name', 'email'])->get();
+        return json($users, 'Usuários buscados.');
+    }
 }

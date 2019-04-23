@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Staff;
+use App\Models\User;
+use App\Models\UserStaff;
 use App\Http\Requests\Staff\NewStaff as NewStaffRequest;
+use Illuminate\Http\Request;
 use Auth;
 
 class StaffController extends Controller
@@ -14,10 +17,9 @@ class StaffController extends Controller
      */
     public function index()
     {
-		$staff = Auth::user()->staff;
+		$staff = Auth::user()->staffs()->where('is_active', true)->get();
 		return json($staff, 'Busca realizada.');
     }
-
 
     /**
      * TODO: cria uma nova equipe de administradores
@@ -41,5 +43,37 @@ class StaffController extends Controller
 			'is_active' => !$staff->is_active
 		]);
 		return json($staff, 'Equipe ativada/desativada com sucesso.');
+    }
+
+    public function members($id)
+    {
+        $staff = Staff::findOrFail($id);
+        return json($staff->members, 'Membros listados.');
+    }
+
+    public function addMember($id)
+    {
+        try {
+            $user = User::where('email', request('email'))->first();
+            $staff = Staff::findOrFail($id);
+
+            if ($staff->owner->is($user) || $staff->members->contains($user)) {
+                return response()->json([], 'Membro não pode ser adicionado à equipe.')->setStatusCode(500);
+            }
+
+
+            $staff->members()->save($user);
+            return json($user, 'Membro adicionado.');
+        } catch (\Exception $e) {
+            return json([], $e->getMessage());
+        }
+    }
+
+    public function removeMember($id, $user_id)
+    {
+        $staff = Staff::findOrFail($id);
+        $staff->members()->find($user_id)->pivot->delete();
+
+        return json([], 'Membro removido');
     }
 }
