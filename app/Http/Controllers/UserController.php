@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\UserPreference;
 use App\Models\UserProfile;
 use App\Models\Address;
+use App\Models\Follow;
 use App\Http\Requests\User\NewUser as NewUserRequest;
 use App\Http\Requests\User\UpdateUser as UpdateUserRequest;
 use App\Http\Requests\UserProfile\UpdateUserProfile as UpdateUserProfileRequest;
@@ -113,5 +114,19 @@ class UserController extends Controller
     {
         $users = User::where('email', 'like', "%$email%")->pluck(['id', 'name', 'email'])->get();
         return json($users, 'Usuários buscados.');
+    }
+
+    public function getFollowers($user_id = null)
+    {
+        $user = is_null($user_id) ? (Auth::user()) : User::findOrFail($user_id);
+        $users = $user->followers;
+        return json($users, 'Seguidores buscados');
+    }
+
+    public function getFollowings($user_id = null)
+    {
+        $user = is_null($user_id) ? (Auth::user()) : User::findOrFail($user_id);
+        $users = $user->followings;
+        return json($users, 'Seguidores buscados.');
     }
 }

@@ -9,4 +9,9 @@ class Follow extends Model
 	protected $fillable = [
 		'followable_id', 'followable_type', 'user_id',
 	];
+
+	public function followable()
+	{
+		return $this->morphTo();
+	}
 }

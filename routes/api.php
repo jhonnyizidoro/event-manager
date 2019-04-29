@@ -18,6 +18,10 @@ Route::prefix('user')->group(function() {
 	Route::get('profile', 'UserController@profile')->middleware('auth');
 	Route::put('profile', 'UserController@updateProfile')->middleware('auth');
 	Route::get('search/email/{email}', 'UserController@searchByEmail')->middleware('auth');
+	Route::get('followers', 'UserController@getFollowers')->middleware('auth');
+	Route::get('followings', 'UserController@getFollowings')->middleware('auth');
+	Route::get('{user_id}/followers', 'UserController@getFollowers')->middleware('auth');
+	Route::get('{user_id}/followings', 'UserController@getFollowings')->middleware('auth');
 });
 
 //Rotas de gerênciamento de endereço

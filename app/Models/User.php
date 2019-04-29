@@ -83,4 +83,14 @@ class User extends Authenticatable implements JWTSubject
 	{
 		return $this->belongsToMany('App\Models\Staff', 'user_staff', 'user_id', 'staff_id');
 	}
+
+	public function following()
+	{
+		return $this->morphedByMany('App\Models\User', 'followable', 'follows', 'user_id');
+	}
+
+	public function followers()
+	{
+		return $this->morphToMany('App\Models\User', 'followable', 'follows', 'followable_id');
+	}
 }
