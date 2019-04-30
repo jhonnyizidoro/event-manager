@@ -97,10 +97,14 @@ class UserController extends Controller
         return json($address, 'Endereço do usuário localizado.');
     }
 
-    public function profile()
+    public function profile($user_id = null)
     {
-        $profile = Auth::user()->profile;
-        return json($profile, 'Dados do perfil localizados.');
+        $user = is_null($user_id) ? (Auth::user()) : User::findOrFail($user_id);
+        $user = User::with([
+            'address.city.state',
+            'profile'
+        ])->findOrFail($user->id);
+        return json($user, 'Dados do perfil localizados.');
     }
 
     public function updateProfile(UpdateUserProfileRequest $request)
@@ -116,17 +120,31 @@ class UserController extends Controller
         return json($users, 'Usuários buscados.');
     }
 
-    public function getFollowers($user_id = null)
+    public function getFollowers()
     {
-        $user = is_null($user_id) ? (Auth::user()) : User::findOrFail($user_id);
-        $users = $user->followers;
+        $users = Auth::user()->followers()->with('address.city.state')->get();
         return json($users, 'Seguidores buscados');
     }
 
-    public function getFollowings($user_id = null)
+    public function getFollowings()
     {
-        $user = is_null($user_id) ? (Auth::user()) : User::findOrFail($user_id);
-        $users = $user->followings;
+        $users = Auth::user()->followings()->with('address.city.state')->get();
         return json($users, 'Seguidores buscados.');
+    }
+
+    public function unfollow($user_id)
+    {
+        Auth::user()->followings()->where('followable_id', $user_id)->first()->pivot->delete();
+        return json([], 'Deixou de seguir com sucesso.');
+    }
+
+    public function follow($user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        if (!Auth::user()->following()->contains($user))
+            Auth::user()->followings()->save($user);
+
+        return json([], 'Começou a seguir com sucesso.');
     }
 }
