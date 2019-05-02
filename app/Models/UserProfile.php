@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class UserProfile extends Model
 {
 	protected $fillable = [
-		'cover', 'picture', 'description', 'custom_url', 'user_id',
+		'cover', 'picture', 'description', 'custom_url', 'user_id'
 	];
 
 	protected $appends = [
 		'followers_count',
-		'followings_count'
+		'followings_count',
+		'posts_count'
 	];
 
 	public function user()
@@ -28,5 +29,10 @@ class UserProfile extends Model
 	public function getFollowingsCountAttribute()
 	{
 		return $this->user->followings->count();
+	}
+
+	public function getPostsCountAttribute()
+	{
+		return $this->user->posts->count();
 	}
 }

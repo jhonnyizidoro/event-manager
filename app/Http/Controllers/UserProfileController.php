@@ -87,7 +87,7 @@ class UserProfileController extends Controller
     public function posts($user_id)
     {
         $user = User::findOrFail($user_id);
-        $posts = $user->posts()->with('user:id,name')->orderBy('created_at', 'desc')->take(10)->get();
+        $posts = $user->posts()->with('user:id,name')->where('is_active', true)->orderBy('created_at', 'desc')->take(10)->get();
 
         return json($posts, 'Posts buscados.');
     }
