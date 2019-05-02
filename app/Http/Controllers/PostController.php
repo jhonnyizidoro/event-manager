@@ -39,6 +39,7 @@ class PostController extends Controller
     {
         $request->merge(['user_id' => Auth::user()->id]);
         $post = Post::create($request->all());
+        $post->user;
 
         return json($post, 'Post salvo.');
     }
