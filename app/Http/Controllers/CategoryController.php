@@ -14,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-		$categories = Category::get();
+		$categories = Category::paginate(10);
 		return json($categories, 'Categorias buscadas.');
     }
 

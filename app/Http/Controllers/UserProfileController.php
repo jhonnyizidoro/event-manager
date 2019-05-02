@@ -82,4 +82,12 @@ class UserProfileController extends Controller
     {
         //
     }
+
+    public function posts($user_id)
+    {
+        $user = User::findOrFail($user_id);
+        $posts = $user->posts()->take(10);
+
+        return json($posts, 'Posts buscados.');
+    }
 }

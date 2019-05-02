@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class UpdateCategory extends FormRequest
+class NewPost extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,12 +26,11 @@ class UpdateCategory extends FormRequest
     public function rules()
     {
         return [
-			'category_id' => 'required|exists:categories,id',
-			'name' => 'max:191|string',
+            'text' => 'required|string|max:191'
         ];
-	}
+    }
 
-	protected function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
 		$response = [
 			'status' => false,

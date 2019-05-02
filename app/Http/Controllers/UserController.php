@@ -93,7 +93,7 @@ class UserController extends Controller
 
     public function address()
     {
-        $address = Auth::user()->address;
+        $address = Auth::user()->address()->with('city.state')->first();
         return json($address, 'Endereço do usuário localizado.');
     }
 
@@ -122,13 +122,13 @@ class UserController extends Controller
 
     public function getFollowers()
     {
-        $users = Auth::user()->followers()->with('address.city.state')->get();
+        $users = Auth::user()->followers()->with('address.city.state', 'profile')->get();
         return json($users, 'Seguidores buscados');
     }
 
     public function getFollowings()
     {
-        $users = Auth::user()->followings()->with('address.city.state')->get();
+        $users = Auth::user()->followings()->with('address.city.state', 'profile')->get();
         return json($users, 'Seguidores buscados.');
     }
 

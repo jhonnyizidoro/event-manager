@@ -94,4 +94,11 @@ Route::prefix('staff')->group(function() {
 
 Route::prefix('profile')->group(function() {
 	Route::put('', 'UserProfileController@update')->middleware('auth');
+	Route::get('{user_id}/posts', 'UserProfileController@posts')->middleware('auth');
+});
+
+Route::prefix('post')->group(function() {
+	Route::get('{id}', 'PostController@index')->middleware('auth');
+	Route::post('', 'PostController@store')->middleware('auth');
+	Route::put('{id}', 'PostController@update')->middleware('auth');
 });

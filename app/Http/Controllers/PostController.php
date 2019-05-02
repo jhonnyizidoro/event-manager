@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Requests\Post\NewPost as NewPostRequest;
+use Auth;
 
 class PostController extends Controller
 {
@@ -33,9 +35,12 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NewPostRequest $request)
     {
-        //
+        $request->merge(['user_id' => Auth::user()->id]);
+        $post = Post::create($request->all());
+
+        return json($post, 'Post salvo.');
     }
 
     /**
