@@ -102,3 +102,9 @@ Route::prefix('post')->group(function() {
 	Route::post('', 'PostController@store')->middleware('auth');
 	Route::put('{id}', 'PostController@update')->middleware('auth');
 });
+
+Route::prefix('serie')->group(function() {
+	Route::get('', 'EventSerieController@index')->middleware('auth');
+	Route::post('', 'EventSerieController@store')->middleware('auth');
+	Route::delete('{serie_id}', 'EventSerieController@destroy')->middleware('auth');
+});

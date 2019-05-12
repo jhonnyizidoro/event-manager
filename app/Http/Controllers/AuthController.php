@@ -15,7 +15,7 @@ class AuthController extends Controller
 		if ($token) {
 			return json(self::getTokenInfo($token), 'Login efetuado com sucesso.');
 		}
-		return json([], 'Não encontramos nenhum usuário com as credênciais informadas.');
+		return json([], 'Não encontramos nenhum usuário com as credênciais informadas.', false, 403);
 	}
 
 	public function logout()

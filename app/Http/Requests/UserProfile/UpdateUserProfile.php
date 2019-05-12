@@ -5,6 +5,7 @@ namespace App\Http\Requests\UserProfile;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use App\Rules\Base64Image;
 
 class UpdateUserProfile extends FormRequest
 {
@@ -26,8 +27,8 @@ class UpdateUserProfile extends FormRequest
     public function rules()
     {
 		return [
-			'cover' => 'image',
-			'piture' => 'image',
+			'cover' => new Base64Image,
+			'piture' => new Base64Image,
 			'description' => 'string|max:191',
 			'custom_url' => 'string|max:25'
         ];

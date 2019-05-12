@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\EventSerie;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use App\Rules\Base64Image;
 
-class UpdateUser extends FormRequest
+class NewEventSerie extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,21 +26,13 @@ class UpdateUser extends FormRequest
      */
     public function rules()
     {
-		return [
-			'user_id' => 'required|exists:users,id',
-			'name' => 'string|max:191',
-			'email' => 'email|max:191',
-			'password' => 'confirmed|string|max:59|min:6',
-			'nickname' => 'string|max:191|nullable',
-			'birthdate' => 'date|date_format:"d/m/Y"|nullable',
-			'is_admin' => 'boolean',
-			//Preferences
-			'receive_events_email' => 'boolean',
-			'receive_events_notification' => 'boolean',
-			'events_notification_range' => 'integer|min:0',
+        return [
+			'name' => 'required|string|max:191',
+			'cover' => new Base64Image,
+			'description' => 'string|max:191',
         ];
 	}
-
+	
 	protected function failedValidation(Validator $validator)
     {
 		$response = [

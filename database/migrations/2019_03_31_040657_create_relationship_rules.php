@@ -40,6 +40,11 @@ class CreateRelationshipRules extends Migration
 			$table->foreign('event_id')->references('id')->on('events');
 		});
 
+		Schema::table('event_series', function (Blueprint $table) {
+			$table->unsignedBigInteger('user_id');
+			$table->foreign('user_id')->references('id')->on('users');
+		});
+
 		Schema::table('event_staff', function (Blueprint $table) {
 			$table->unsignedBigInteger('event_id');
 			$table->foreign('event_id')->references('id')->on('events');
@@ -160,6 +165,11 @@ class CreateRelationshipRules extends Migration
 			$table->dropForeign(['event_id']);
 			$table->dropForeign(['user_id']);
 			$table->dropColumn('event_id');
+			$table->dropColumn('user_id');
+		});
+
+		Schema::table('event_series', function (Blueprint $table) {
+			$table->dropForeign(['user_id']);
 			$table->dropColumn('user_id');
 		});
 

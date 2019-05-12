@@ -10,6 +10,7 @@ use App\Models\Follow;
 use App\Http\Requests\User\NewUser as NewUserRequest;
 use App\Http\Requests\User\UpdateUser as UpdateUserRequest;
 use App\Http\Requests\UserProfile\UpdateUserProfile as UpdateUserProfileRequest;
+use App\Helpers\File;
 use Auth;
 use Carbon\Carbon;
 
@@ -52,6 +53,8 @@ class UserController extends Controller
     public function me()
     {
 		$user = Auth::user();
+		$user->address = Auth::user()->address;
+		$user->profile = Auth::user()->profile;
 		return json($user, 'Busca realizada com sucesso.');
     }
 
@@ -109,7 +112,17 @@ class UserController extends Controller
 
     public function updateProfile(UpdateUserProfileRequest $request)
     {
-        $profile = Auth::user()->profile;
+		$profile = Auth::user()->profile;
+		if ($request->picture) {
+			$request->merge([
+				'picture' => File::uploadBase64($request->picture, 'users/pictures'),
+			]);
+		}
+		if ($request->cover) {
+			$request->merge([
+				'cover' => File::uploadBase64($request->cover, 'users/cover'),
+			]);
+		}
         $profile->update($request->all());
         return json($profile, 'Dados do perfil atualizado com sucesso.');
     }

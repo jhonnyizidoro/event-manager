@@ -18,6 +18,7 @@ class CreateEventSeriesTable extends Migration
 			$table->string('name');
 			$table->string('cover')->nullable();
 			$table->text('description')->nullable();
+			$table->boolean('is_active')->default(true);
         });
     }
 

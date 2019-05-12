@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\EventSerie;
-use Illuminate\Http\Request;
+use App\Http\Requests\EventSerie\NewEventSerie as NewEventSerieRequest;
+use App\Helpers\File;
+
+use Auth;
 
 class EventSerieController extends Controller
 {
@@ -14,17 +17,8 @@ class EventSerieController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+		$series = Auth::user()->series()->where('is_active', true)->get();
+		return json($series, 'Séries buscadas com sucesso!');
     }
 
     /**
@@ -33,9 +27,14 @@ class EventSerieController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NewEventSerieRequest $request)
     {
-        //
+		$request->merge([
+			'cover' => File::uploadBase64($request->cover, 'serie/cover'),
+			'user_id' => Auth::user()->id
+		]);
+		$serie = EventSerie::create($request->all());
+		return json($serie, 'Série criada com sucesso!');
     }
 
     /**
@@ -78,8 +77,12 @@ class EventSerieController extends Controller
      * @param  \App\Models\EventSerie  $eventSerie
      * @return \Illuminate\Http\Response
      */
-    public function destroy(EventSerie $eventSerie)
+    public function destroy($id)
     {
-        //
+		$serie = EventSerie::findOrFail($id);
+		$serie->update([
+			'is_active' => !$serie->is_active
+		]);
+		return json($serie, 'Série ativada/desativada com sucesso.');
     }
 }

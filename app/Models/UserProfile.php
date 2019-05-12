@@ -16,6 +16,20 @@ class UserProfile extends Model
 		'posts_count'
 	];
 
+	public function getPictureAttribute($picture)
+    {
+		if ($picture) {
+			return env('AWS_URL') . $picture;
+		}
+	}
+
+	public function getCoverAttribute($cover)
+    {
+		if ($cover) {
+			return env('AWS_URL') . $cover;
+		}
+	}
+
 	public function user()
 	{
 		return $this->belongsTo('App\Models\User');
