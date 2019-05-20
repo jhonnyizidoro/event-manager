@@ -13,6 +13,7 @@ use App\Http\Requests\UserProfile\UpdateUserProfile as UpdateUserProfileRequest;
 use App\Helpers\File;
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -159,5 +160,11 @@ class UserController extends Controller
             Auth::user()->followings()->save($user);
 
         return json([], 'Começou a seguir com sucesso.');
+    }
+
+    public function findByEmail(Request $request)
+    {
+        $user = User::where('email', $request->get('email'))->firstOrFail();
+        return response()->json($user, 200);
     }
 }

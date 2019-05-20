@@ -23,6 +23,7 @@ Route::prefix('user')->group(function() {
 	Route::get('followings', 'UserController@getFollowings')->middleware('auth');
 	Route::put('{user_id}/unfollow', 'UserController@unfollow')->middleware('auth');
 	Route::put('{user_id}/follow', 'UserController@follow')->middleware('auth');
+	Route::get('find-by-email', 'UserController@findByEmail')->middleware('auth');
 });
 
 //Rotas de gerênciamento de endereço
