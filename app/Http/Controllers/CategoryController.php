@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Http\Requests\Category\NewCategory as NewCategoryRequest;
 use App\Http\Requests\Category\UpdateCategory as UpdateCategoryRequest;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -12,9 +13,13 @@ class CategoryController extends Controller
      * Retorna um json com todas as categorias cadastradas
      * @return Resource com todas as categorias
      */
-    public function index()
+    public function index(Request $request)
     {
-		$categories = Category::paginate(10);
+        if ($request->get('all')) {
+            $categories = Category::get();
+        } else {
+            $categories = Category::paginate(10);
+        }
 		return json($categories, 'Categorias buscadas.');
     }
 
