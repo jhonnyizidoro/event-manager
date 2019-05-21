@@ -7,8 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
 	public $timestamps = false;
-	
+
     protected $fillable = [
 		'name', 'is_active'
-	];
+    ];
+
+    public function users_interested()
+    {
+        return $this->belongsToMany('App\Models\User', 'user_interests');
+    }
 }

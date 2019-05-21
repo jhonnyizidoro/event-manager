@@ -167,4 +167,18 @@ class UserController extends Controller
         $user = User::where('email', $request->get('email'))->firstOrFail();
         return response()->json($user, 200);
     }
+
+    public function myInterests(Request $request)
+    {
+        $interests = Auth::user()->interests;
+        return response()->json($interests, 200);
+    }
+
+    public function deleteInterest($category_id)
+    {
+        $pivot = Auth::user()->interests()->where('category_id', $category_id)->firstOrFail();
+        $pivot->pivot->delete();
+
+        return response()->json(['msg' => 'Interesse excluído.'], 200);
+    }
 }

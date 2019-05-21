@@ -48,5 +48,10 @@ class UserProfile extends Model
 	public function getPostsCountAttribute()
 	{
 		return $this->user->posts->count();
-	}
+    }
+
+    public function posts()
+    {
+        return $this->morphMany('App\Models\Post', 'postable');
+    }
 }

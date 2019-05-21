@@ -95,7 +95,8 @@ Route::prefix('staff')->group(function() {
 
 Route::prefix('profile')->group(function() {
 	Route::put('', 'UserProfileController@update')->middleware('auth');
-	Route::get('{user_id}/posts', 'UserProfileController@posts')->middleware('auth');
+	Route::put('{id}/post', 'UserProfileController@addPost')->middleware('auth');
+	Route::get('{id}/posts', 'UserProfileController@posts')->middleware('auth');
 });
 
 Route::prefix('post')->group(function() {
@@ -108,4 +109,9 @@ Route::prefix('serie')->group(function() {
 	Route::get('', 'EventSerieController@index')->middleware('auth');
 	Route::post('', 'EventSerieController@store')->middleware('auth');
 	Route::delete('{serie_id}', 'EventSerieController@destroy')->middleware('auth');
+});
+
+Route::prefix('interest')->group(function() {
+	Route::get('', 'UserController@myInterests')->middleware('auth');
+	Route::delete('{category_id}', 'UserController@deleteInterest')->middleware('auth');
 });

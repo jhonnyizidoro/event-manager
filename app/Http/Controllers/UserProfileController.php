@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\UserProfile;
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Auth;
 
 class UserProfileController extends Controller
 {
@@ -84,11 +86,30 @@ class UserProfileController extends Controller
         //
     }
 
-    public function posts($user_id)
+    public function posts($id)
     {
-        $user = User::findOrFail($user_id);
-        $posts = $user->posts()->with('user:id,name')->where('is_active', true)->orderBy('created_at', 'desc')->take(10)->get();
+        $profile = UserProfile::findOrFail($id);
+        $posts = $profile->posts()->with('user:id,name')->where('is_active', true)->orderBy('created_at', 'desc')->take(10)->get();
 
         return json($posts, 'Posts buscados.');
+    }
+
+    public function addPost(Request $request)
+    {
+        try {
+            $profile = UserProfile::findOrFail(request('id'));
+
+            $post = new Post();
+            $post->fill($request->all());
+            $post->user_id = Auth::user()->id;
+
+            $profile->posts()->save($post);
+            $post->user;
+
+            return response()->json($post, 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['msg' => 'Erro ao tentar salvar post.'.$e->getMessage()], 500);
+        }
     }
 }

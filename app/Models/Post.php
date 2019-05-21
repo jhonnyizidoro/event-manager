@@ -24,4 +24,9 @@ class Post extends Model
 	{
 		return $this->user_id == Auth::user()->id;
 	}
+
+	public function postable()
+	{
+		return $this->morphTo();
+	}
 }
