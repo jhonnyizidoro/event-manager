@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\UserProfile;
 use App\Models\User;
 use App\Models\Post;
+use App\Helpers\File;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -98,6 +99,12 @@ class UserProfileController extends Controller
     {
         try {
             $profile = UserProfile::findOrFail(request('id'));
+
+            if ($request->file) {
+                $request->merge([
+                    'image_path' => File::uploadBase64($request->file, 'posts/pictures')
+                ]);
+            }
 
             $post = new Post();
             $post->fill($request->all());

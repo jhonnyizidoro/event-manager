@@ -11,9 +11,9 @@ use App\Http\Requests\User\NewUser as NewUserRequest;
 use App\Http\Requests\User\UpdateUser as UpdateUserRequest;
 use App\Http\Requests\UserProfile\UpdateUserProfile as UpdateUserProfileRequest;
 use App\Helpers\File;
-use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Auth;
 
 class UserController extends Controller
 {

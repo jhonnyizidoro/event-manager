@@ -15,14 +15,21 @@ class Post extends Model
 		'is_owner'
 	];
 
-	public function user()
-	{
-		return $this->belongsTo('App\Models\User');
+	public function getImagePathAttribute($imagePath)
+    {
+		if ($imagePath) {
+			return env('AWS_URL') . $imagePath;
+		}
 	}
 
 	public function getIsOwnerAttribute()
 	{
 		return $this->user_id == Auth::user()->id;
+	}
+
+	public function user()
+	{
+		return $this->belongsTo('App\Models\User');
 	}
 
 	public function postable()
