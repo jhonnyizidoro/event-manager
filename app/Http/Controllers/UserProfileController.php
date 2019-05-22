@@ -90,7 +90,18 @@ class UserProfileController extends Controller
     public function posts($id)
     {
         $profile = UserProfile::findOrFail($id);
-        $posts = $profile->posts()->with('user:id,name')->where('is_active', true)->orderBy('created_at', 'desc')->take(10)->get();
+        $posts = $profile->posts()
+            ->with([
+                'user:id,name',
+                'user.profile:id,picture,user_id',
+                'comments:id,text,user_id,commentable_id',
+                'comments.user:id,name',
+                'comments.user.profile:id,picture,user_id'
+            ])
+            ->where('is_active', true)
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get();
 
         return json($posts, 'Posts buscados.');
     }
@@ -112,6 +123,7 @@ class UserProfileController extends Controller
 
             $profile->posts()->save($post);
             $post->user;
+            $post->user->profile;
 
             return response()->json($post, 200);
 
