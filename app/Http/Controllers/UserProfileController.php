@@ -94,7 +94,7 @@ class UserProfileController extends Controller
             ->with([
                 'user:id,name',
                 'user.profile:id,picture,user_id',
-                'comments:id,text,user_id,commentable_id',
+                'comments:id,text,user_id,commentable_id,created_at',
                 'comments.user:id,name',
                 'comments.user.profile:id,picture,user_id'
             ])
