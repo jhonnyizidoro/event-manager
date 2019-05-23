@@ -116,3 +116,5 @@ Route::prefix('interest')->group(function() {
 	Route::get('', 'UserController@myInterests')->middleware('auth');
 	Route::delete('{category_id}', 'UserController@deleteInterest')->middleware('auth');
 });
+
+Route::get('search/{query}', 'SearchController@search')->middleware('auth');

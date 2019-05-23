@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if ($request->get('all')) {
-            $categories = Category::get();
+            $categories = Category::orderBy('name', 'asc')->get();
         } else {
             $categories = Category::paginate(10);
         }
