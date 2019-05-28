@@ -14,16 +14,21 @@ Route::prefix('user')->group(function() {
 	Route::get('me', 'UserController@me')->middleware('auth');
 	Route::put('', 'UserController@update')->middleware('auth');
 	Route::delete('{user_id}', 'UserController@destroy')->middleware('auth');
+
 	Route::get('address', 'UserController@address')->middleware('auth');
 	Route::get('profile', 'UserController@profile')->middleware('auth');
 	Route::get('{user_id}/profile', 'UserController@profile')->middleware('auth');
 	Route::put('profile', 'UserController@updateProfile')->middleware('auth');
+
 	Route::get('search/email/{email}', 'UserController@searchByEmail')->middleware('auth');
 	Route::get('followers', 'UserController@getFollowers')->middleware('auth');
 	Route::get('followings', 'UserController@getFollowings')->middleware('auth');
 	Route::put('{user_id}/unfollow', 'UserController@unfollow')->middleware('auth');
 	Route::put('{user_id}/follow', 'UserController@follow')->middleware('auth');
 	Route::get('find-by-email', 'UserController@findByEmail')->middleware('auth');
+
+	Route::post('fcm-web-token', 'UserController@saveFcmWebToken')->middleware('auth');
+	Route::post('fcm-mobile-token', 'UserController@saveFcmMobileToken')->middleware('auth');
 });
 
 //Rotas de gerênciamento de endereço

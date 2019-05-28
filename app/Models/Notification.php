@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model
 {
 	protected $fillable = [
-		'is_ridden', 'link', 'text', 'user_id',
+		'is_hidden', 'link', 'text'
 	];
+
+	public function users()
+	{
+		return $this->belongsToMany('App\Models\User', 'user_notifications', 'notification_id', 'user_id');
+	}
 }

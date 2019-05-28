@@ -18,6 +18,10 @@ class UsersTableSeeder extends Seeder
 			'address_id' => 1
 		]);
 
+		$profile = UserProfile::create([
+			'user_id' => $user->id
+		]);
+
 		$user = User::create([
 			'name' => 'Jhonny USER Menarim',
 			'email' => 'user@gmail.com',
@@ -25,6 +29,10 @@ class UsersTableSeeder extends Seeder
 			'nickname' => 'jhonnymenarimuser',
 			'birthdate' => '1997-01-06',
 			'address_id' => 1
+		]);
+
+		$profile = UserProfile::create([
+			'user_id' => $user->id
 		]);
 
 		$user = User::create([

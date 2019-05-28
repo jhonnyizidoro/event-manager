@@ -128,6 +128,32 @@ class UserController extends Controller
         return json($profile, 'Dados do perfil atualizado com sucesso.');
     }
 
+    public function saveFcmWebToken(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|string'
+        ]);
+
+        $user = Auth::user();
+        $user->fcm_web_token = $request->post('token');
+        $user->save();
+
+        return json(['msg' => 'FCM Web Token atualizado com sucesso.'], 200);
+    }
+
+    public function saveFcmMobileToken(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|string'
+        ]);
+
+        $user = Auth::user();
+        $user->fcm_mobile_token = $request->post('token');
+        $user->save();
+
+        return json(['msg' => 'FCM Mobile Token atualizado com sucesso.'], 200);
+    }
+
     public function searchByEmail($email)
     {
         $users = User::where('email', 'like', "%$email%")->pluck(['id', 'name', 'email'])->get();

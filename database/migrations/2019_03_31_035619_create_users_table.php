@@ -21,7 +21,9 @@ class CreateUsersTable extends Migration
 			$table->string('nickname')->nullable()->unique();
 			$table->date('birthdate')->nullable();
 			$table->boolean('is_active')->default(true);
-			$table->boolean('is_admin')->default(false);
+            $table->boolean('is_admin')->default(false);
+            $table->string('fcm_web_token')->nullable();
+            $table->string('fcm_mobile_token')->nullable();
             $table->timestamps();
         });
     }
