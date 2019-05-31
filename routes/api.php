@@ -29,6 +29,8 @@ Route::prefix('user')->group(function() {
 
 	Route::post('fcm-web-token', 'UserController@saveFcmWebToken')->middleware('auth');
 	Route::post('fcm-mobile-token', 'UserController@saveFcmMobileToken')->middleware('auth');
+
+	Route::get('notifications', 'UserController@notifications')->middleware('auth');
 });
 
 //Rotas de gerênciamento de endereço
@@ -123,3 +125,7 @@ Route::prefix('interest')->group(function() {
 });
 
 Route::get('search/{query}', 'SearchController@search')->middleware('auth');
+
+Route::prefix('notification')->group(function() {
+	Route::post('read-all', 'NotificationController@readAll')->middleware('auth');
+});

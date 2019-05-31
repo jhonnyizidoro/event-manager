@@ -207,4 +207,10 @@ class UserController extends Controller
 
         return response()->json(['msg' => 'Interesse excluído.'], 200);
     }
+
+    public function notifications()
+    {
+        $notifications = Auth::user()->notifications;
+        return response()->json($notifications, 200);
+    }
 }

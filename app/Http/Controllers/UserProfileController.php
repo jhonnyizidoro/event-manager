@@ -124,6 +124,7 @@ class UserProfileController extends Controller
             $profile->posts()->save($post);
             $post->user;
             $post->user->profile;
+            $post->comments;
 
             return response()->json($post, 200);
 
