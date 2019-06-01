@@ -108,6 +108,11 @@ class UserController extends Controller
             'address.city.state',
             'profile'
         ])->findOrFail($user->id);
+
+        if (! Auth::user()->is($user)) {
+            $user->profile->follows = Auth::user()->followings->contains($user);
+        }
+
         return json($user, 'Dados do perfil localizados.');
     }
 
@@ -182,7 +187,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($user_id);
 
-        if (!Auth::user()->following()->contains($user))
+        if (!Auth::user()->followings->contains($user))
             Auth::user()->followings()->save($user);
 
         return json([], 'Começou a seguir com sucesso.');

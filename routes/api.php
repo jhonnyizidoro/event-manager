@@ -21,11 +21,12 @@ Route::prefix('user')->group(function() {
 	Route::put('profile', 'UserController@updateProfile')->middleware('auth');
 
 	Route::get('search/email/{email}', 'UserController@searchByEmail')->middleware('auth');
+	Route::get('find-by-email', 'UserController@findByEmail')->middleware('auth');
+
 	Route::get('followers', 'UserController@getFollowers')->middleware('auth');
 	Route::get('followings', 'UserController@getFollowings')->middleware('auth');
 	Route::put('{user_id}/unfollow', 'UserController@unfollow')->middleware('auth');
 	Route::put('{user_id}/follow', 'UserController@follow')->middleware('auth');
-	Route::get('find-by-email', 'UserController@findByEmail')->middleware('auth');
 
 	Route::post('fcm-web-token', 'UserController@saveFcmWebToken')->middleware('auth');
 	Route::post('fcm-mobile-token', 'UserController@saveFcmMobileToken')->middleware('auth');
@@ -128,4 +129,8 @@ Route::get('search/{query}', 'SearchController@search')->middleware('auth');
 
 Route::prefix('notification')->group(function() {
 	Route::post('read-all', 'NotificationController@readAll')->middleware('auth');
+});
+
+Route::prefix('comment')->group(function() {
+	Route::post('{id}/reply', 'CommentController@addReply')->middleware('auth');
 });
