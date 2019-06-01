@@ -32,6 +32,8 @@ Route::prefix('user')->group(function() {
 	Route::post('fcm-mobile-token', 'UserController@saveFcmMobileToken')->middleware('auth');
 
 	Route::get('notifications', 'UserController@notifications')->middleware('auth');
+
+	Route::get('events', 'UserController@events')->middleware('auth');
 });
 
 //Rotas de gerênciamento de endereço

@@ -218,4 +218,15 @@ class UserController extends Controller
         $notifications = Auth::user()->notifications;
         return response()->json($notifications, 200);
     }
+
+    public function events()
+    {
+        $events = Auth::user()->events()->with([
+            'address',
+            'address.city',
+            'address.city.state'
+        ])->orderBy('starts_at', 'asc')->get();
+
+        return response()->json($events, 200);
+    }
 }
