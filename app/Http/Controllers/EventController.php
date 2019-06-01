@@ -7,6 +7,10 @@ use App\Http\Requests\Event\UpdateEvent as UpdateEventRequest;
 use App\Helpers\File;
 use App\Models\Address;
 use App\Models\Event;
+use App\Models\Certificate;
+use App\Models\User;
+use App\Models\Staff;
+use Illuminate\Support\Facades\DB;
 use Auth;
 
 class EventController extends Controller
@@ -27,17 +31,43 @@ class EventController extends Controller
      */
     public function store(NewEventRequest $request)
     {
-		$request->merge([
-			'user_id' => Auth::user()->id,
-			'cover' => File::uploadBase64($request->cover, 'event/cover')
-		]);
-        //Endereço
-		$address = Address::create();
-		//Cria evento e vincula endereço à ele
-		$request->merge(['address_id' => $address->id]);
-		$event = Event::create($request->all());
 
-		return json($event, 'Evento criado com sucesso.'); 
+        try {
+            DB::beginTransaction();
+
+            $address = Address::create($request->post('event'));
+
+            $eventData = $request->post('event');
+            $eventData['cover'] = File::uploadBase64($eventData['cover'], 'event/cover');
+            $eventData['user_id'] = Auth::user()->id;
+            $eventData['address_id'] = $address->id;
+            $event = Event::create($eventData);
+
+            if ($event->is_certified) {
+                $certificateData = $request->post('certificate');
+                $certificateData['logo'] = File::uploadBase64($certificateData['logo'], 'certificate/logo');
+                $certificateData['signature_image'] = File::uploadBase64($certificateData['signature'], 'certificate/signature');
+                $certificateData['signature_name'] = $certificateData['name'];
+                $certificateData['event_id'] = $event->id;
+                $certificate = Certificate::create($certificateData);
+            }
+
+            foreach ($request->post('organizers') as $organizer) {
+                $user = User::findOrFail($organizer['id']);
+                $event->administrators()->save($user);
+            }
+
+            foreach ($request->post('staffs') as $staff) {
+                $staff = Staff::findOrFail($staff['id']);
+                $event->staffs()->save($staff);
+            }
+
+            DB::commit();
+            return response()->json($event, 201);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response(['msg' => 'Erro ao tentar salvar evento.'.$e->getMessage()], 500);
+        }
     }
 
     /**

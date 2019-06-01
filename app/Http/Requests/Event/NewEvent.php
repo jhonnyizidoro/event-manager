@@ -27,18 +27,27 @@ class NewEvent extends FormRequest
     public function rules()
     {
         return [
-			'name' => 'required|string|max:191',
-			'description' => 'string',
-			'cover' => new Base64Image,
-			'starts_at' => 'required|date_format:Y-m-d H:i',
-			'ends_at' => 'required|date_format:Y-m-d H:i',
-			'is_certified' => 'boolean',
-			'min_age' => 'integer',
-			'event_serie_id' => 'exists:event_series,id',
-			'category_id' => 'required|exists:categories,id'
+			'event.name' => 'required|string|max:191',
+			'event.description' => 'string',
+			'event.cover' => new Base64Image,
+			'event.starts_at' => 'required|date_format:Y-m-d H:i',
+			'event.ends_at' => 'required|date_format:Y-m-d H:i',
+			'event.is_certified' => 'boolean',
+			'event.min_age' => 'integer',
+			'event.event_serie_id' => 'exists:event_series,id',
+            'event.category_id' => 'required|exists:categories,id',
+            'address.name' => 'required|string|max:191',
+            'address.street' => 'required|string|max:191',
+            'address.number' => 'required|numeric',
+            'address.neighborhood' => 'required|string|max:191',
+            'address.complement' => 'string|max:191',
+            'address.zip_code' => 'required',
+            'certificate.name' => 'string|max:191',
+            'certificate.logo' => new Base64Image,
+            'certificate.signature' => new Base64Image
         ];
 	}
-	
+
 	protected function failedValidation(Validator $validator)
     {
 		$response = [
