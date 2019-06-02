@@ -16,12 +16,22 @@ use Auth;
 class EventController extends Controller
 {
     /**
-     * Lista todos os eventos do usuário logado.
-     * @return EventResource eventos do usuário logado
+     * Lista eventos
      */
     public function index()
     {
-		$events = Auth::user()->events;
+		$events = Event::with([
+            'address',
+            'address.city',
+            'address.city.state',
+            'owner',
+            'owner.profile'
+        ])->orderBy('starts_at', 'asc')->get();
+
+        foreach ($events as $event) {
+            $event->follows = Auth::user()->events_followed->contains($event);
+        }
+
 		return json($events, 'Eventos buscados.');
     }
 
@@ -105,5 +115,19 @@ class EventController extends Controller
 			'is_active' => !$event->is_active
 		]);
 		return json($event, 'Evento ativado/desativado com sucesso.');
+    }
+
+    public function follow($id)
+    {
+        $event = Event::findOrFail($id);
+        $follows = Auth::user()->events_followed()->where('followable_id', $event->id)->first();
+
+        if (!is_null($follows)) {
+            $follows->pivot->delete();
+        } else {
+            Auth::user()->events_followed()->save($event);
+        }
+
+        return response()->json('Evento seguido/deixado de seguir.', 200);
     }
 }

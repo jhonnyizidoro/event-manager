@@ -225,7 +225,7 @@ class UserController extends Controller
             'address',
             'address.city',
             'address.city.state'
-        ])->orderBy('starts_at', 'asc')->get();
+        ])->orderBy('starts_at', 'asc')->where('is_active', true)->get();
 
         return response()->json($events, 200);
     }

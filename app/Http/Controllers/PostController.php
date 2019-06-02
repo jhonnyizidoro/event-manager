@@ -107,4 +107,22 @@ class PostController extends Controller
             return response()->json(['msg' => 'Erro ao tentar salvar comentário.'], 500);
         }
     }
+
+    public function getPosts()
+    {
+        $followingsIds = Auth::user()->followings->pluck('id')->toArray();
+
+        $posts = Post::with([
+            'user:id,name',
+            'user.profile:id,picture,user_id',
+            'comments:id,text,user_id,commentable_id,created_at',
+            'comments.user:id,name',
+            'comments.user.profile:id,picture,user_id',
+            'comments.replies:id,text,user_id,commentable_id,created_at',
+            'comments.replies.user:id,name',
+            'comments.replies.user.profile:id,picture,user_id'
+        ])->whereIn('user_id', $followingsIds)->orWhere('user_id', Auth::user()->id)->latest()->paginate(10);
+
+        return response()->json($posts, 200);
+    }
 }

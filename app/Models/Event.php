@@ -12,7 +12,7 @@ class Event extends Model
 
     public function owner()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User', 'user_id');
     }
 
 	public function certificate()
@@ -41,4 +41,9 @@ class Event extends Model
     {
         return $this->belongsToMany('App\Models\User', 'event_administrators', 'event_id', 'user_id');
     }
+
+	public function followers()
+	{
+		return $this->morphToMany('App\Models\User', 'followable', 'follows', 'followable_id');
+	}
 }

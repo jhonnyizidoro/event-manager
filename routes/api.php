@@ -77,6 +77,7 @@ Route::prefix('event')->group(function() {
 	Route::get('{event_id}', 'EventController@show');
 	Route::put('', 'EventController@update')->middleware('auth');
 	Route::delete('{event_id}', 'EventController@destroy')->middleware('auth');
+	Route::put('{event_id}/follow', 'EventController@follow')->middleware('auth');
 });
 
 //Rotdas para gerenciamentos de certificados
@@ -111,6 +112,7 @@ Route::prefix('profile')->group(function() {
 
 Route::prefix('post')->group(function() {
 	Route::get('{id}', 'PostController@index')->middleware('auth');
+	Route::get('', 'PostController@getPosts')->middleware('auth');
 	Route::post('', 'PostController@store')->middleware('auth');
 	Route::put('{id}', 'PostController@update')->middleware('auth');
 	Route::post('{id}/comment', 'PostController@addComment')->middleware('auth');
