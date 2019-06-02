@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Notification;
 
 class Event extends Model
 {
@@ -45,5 +46,26 @@ class Event extends Model
 	public function followers()
 	{
 		return $this->morphToMany('App\Models\User', 'followable', 'follows', 'followable_id');
+	}
+
+	public function category()
+	{
+		return $this->belongsTo('App\Models\Category');
+	}
+
+	public static function boot()
+	{
+		parent::boot();
+
+		static::created(function (Event $event) {
+			$event->notificateInterestedUsers();
+		});
+	}
+
+	public function notificateInterestedUsers()
+	{
+		$notification = new Notification();
+		$notification->text = 'Novo evento dia ' . $event->starts_at . ' na categoria ' . $event->category->name . '.';
+
 	}
 }

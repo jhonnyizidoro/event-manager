@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Http\Requests\Category\NewCategory as NewCategoryRequest;
 use App\Http\Requests\Category\UpdateCategory as UpdateCategoryRequest;
 use Illuminate\Http\Request;
+use Auth;
 
 class CategoryController extends Controller
 {
@@ -66,5 +67,16 @@ class CategoryController extends Controller
 			'is_active' => !$category->is_active
 		]);
         return json($category, 'Categoria ativada/desativada.');
+    }
+
+    public function searchInterest()
+    {
+        $term = request('term');
+
+        $interestsIds = Auth::user()->interests->pluck('id')->toArray();
+
+        $categories = Category::whereNotIn('id', $interestsIds)->where('name', 'like', "%$term%")->where('is_active', true)->get();
+
+        return response()->json($categories, 200);
     }
 }

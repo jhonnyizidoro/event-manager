@@ -7,6 +7,7 @@ use App\Models\UserPreference;
 use App\Models\UserProfile;
 use App\Models\Address;
 use App\Models\Follow;
+use App\Models\Category;
 use App\Http\Requests\User\NewUser as NewUserRequest;
 use App\Http\Requests\User\UpdateUser as UpdateUserRequest;
 use App\Http\Requests\UserProfile\UpdateUserProfile as UpdateUserProfileRequest;
@@ -203,6 +204,18 @@ class UserController extends Controller
     {
         $interests = Auth::user()->interests;
         return response()->json($interests, 200);
+    }
+
+    public function addInterest(Request $request)
+    {
+        $category = Category::findOrFail($request->post('category_id'));
+
+        if (Auth::user()->interests->contains($category)) {
+            return response()->json('Usuário já possui esta categoria como interesse.', 500);
+        }
+
+        Auth::user()->interests()->save($category);
+        return response()->json($category, 200);
     }
 
     public function deleteInterest($category_id)

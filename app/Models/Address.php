@@ -13,5 +13,13 @@ class Address extends Model
 	public function city()
 	{
 		return $this->belongsTo('App\Models\City');
-	}
+    }
+
+    public static function boot() {
+        parent::boot();
+
+        static::creating(function(Address $address) {
+            // Get latitude e longitude
+        });
+    }
 }
