@@ -35,7 +35,7 @@ class EventController extends Controller
         try {
             DB::beginTransaction();
 
-            $address = Address::create($request->post('event'));
+            $address = Address::create($request->post('address'));
 
             $eventData = $request->post('event');
             $eventData['cover'] = File::uploadBase64($eventData['cover'], 'event/cover');
