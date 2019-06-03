@@ -57,15 +57,47 @@ class Event extends Model
 	{
 		parent::boot();
 
-		static::created(function (Event $event) {
-			$event->notificateInterestedUsers();
+		static::created(function(Event $model) {
+			$model->notificateInterestedUsers();
+		});
+
+		static::updated(function(Event $model) {
+			$old = $model->getOriginal('is_active');
+			if ($old != $model->is_active) {
+				$model->notificateFollowers('O evento ' . $model->name . ' acaba de ser cancelado.');
+			}
 		});
 	}
 
 	public function notificateInterestedUsers()
 	{
 		$notification = new Notification();
-		$notification->text = 'Novo evento dia ' . $event->starts_at . ' na categoria ' . $event->category->name . '.';
+		$notification->text = 'Novo evento dia ' . $this->starts_at . ' na categoria ' . $this->category->name . '.';
+		$notification->save();
 
+		$users = $this->category->users_interested;
+
+		foreach ($users as $user) {
+			$user->notifications()->save($notification);
+			if (!is_null($user->fcm_web_token)) {
+				$notification->send($user);
+			}
+		}
+	}
+
+	public function notificateFollowers($text)
+	{
+		$notification = new Notification();
+		$notification->text = $text;
+		$notification->save();
+
+		$users = $this->followers;
+
+		foreach ($users as $user) {
+			$user->notifications()->save($notification);
+			if (!is_null($user->fcm_web_token)) {
+				$notification->send($user);
+			}
+		}
 	}
 }

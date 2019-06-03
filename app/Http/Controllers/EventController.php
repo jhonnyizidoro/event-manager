@@ -26,7 +26,7 @@ class EventController extends Controller
             'address.city.state',
             'owner',
             'owner.profile'
-        ])->orderBy('starts_at', 'asc')->get();
+        ])->orderBy('starts_at', 'asc')->where('is_active', true)->get();
 
         foreach ($events as $event) {
             $event->follows = Auth::user()->events_followed->contains($event);

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Google;
 use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
@@ -19,7 +20,20 @@ class Address extends Model
         parent::boot();
 
         static::creating(function(Address $address) {
-            // Get latitude e longitude
+            $address->getGeolocation();
         });
+
+        static::updating(function(Address $address) {
+            $address->getGeolocation();
+        });
+    }
+
+    public function getGeolocation()
+    {
+        $geolocation = Google::getGeolocation($this);
+        if ($geolocation) {
+            $this->latitude = $geolocation->latitude;
+            $this->longitude = $geolocation->longitude;
+        }
     }
 }
