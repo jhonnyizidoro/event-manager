@@ -140,3 +140,5 @@ Route::prefix('notification')->group(function() {
 Route::prefix('comment')->group(function() {
 	Route::post('{id}/reply', 'CommentController@addReply')->middleware('auth');
 });
+
+Route::get('is-email-valid', 'UserProfileController@isEmailValid')->middleware('auth');

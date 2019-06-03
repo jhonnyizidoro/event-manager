@@ -135,4 +135,12 @@ class UserProfileController extends Controller
             return response()->json(['msg' => 'Erro ao tentar salvar post.'.$e->getMessage()], 500);
         }
     }
+
+    public function isEmailValid(Request $request)
+    {
+        $email = $request->get('email');
+        $hasUser = User::where('email', $email)->first();
+
+        return response()->json(['valid' => Auth::user()->is($hasUser) ? true : is_null($hasUser)], 200);
+    }
 }
