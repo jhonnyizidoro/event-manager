@@ -14,6 +14,7 @@ use App\Http\Requests\UserProfile\UpdateUserProfile as UpdateUserProfileRequest;
 use App\Helpers\File;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Auth;
 
 class UserController extends Controller
@@ -131,6 +132,21 @@ class UserController extends Controller
 		}
         $profile->update($request->all());
         return json($profile, 'Dados do perfil atualizado com sucesso.');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required|string|min:6',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        if (!Hash::check($request->post('current_password'), Auth::user()->password)) {
+            return response()->json(['msg' => 'Senha atual inserida está incorreta.'], 403);
+        }
+
+        Auth::user()->update(['password' => $request->post('password')]);
+        return response()->json('Senha atualizada com sucesso.', 200);
     }
 
     public function saveFcmWebToken(Request $request)
