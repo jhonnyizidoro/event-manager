@@ -135,6 +135,7 @@ Route::get('search/{query}', 'SearchController@search')->middleware('auth');
 
 Route::prefix('notification')->group(function() {
 	Route::post('read-all', 'NotificationController@readAll')->middleware('auth');
+	Route::put('{id}/read', 'NotificationController@read')->middleware('auth');
 });
 
 Route::prefix('comment')->group(function() {

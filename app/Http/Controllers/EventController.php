@@ -86,7 +86,13 @@ class EventController extends Controller
      */
     public function show($id)
     {
-		$event = Event::findOrFail($id);
+		$event = Event::with([
+            'address',
+            'address.city:id,name,state_id',
+            'address.city.state:id,name,code',
+            'owner:id,name,nickname',
+            'owner.profile'
+        ])->findOrFail($id);
 		return json($event, 'Evento encontrado.');
     }
 

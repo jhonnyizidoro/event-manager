@@ -16,13 +16,13 @@ class AddressController extends Controller
 		$user = Auth::user();
 		return $this->update($user, $request);
 	}
-	
+
     public function updateEventAddress(UpdateEventAddressRequest $request)
     {
 		$event = Event::find($request->event_id);
 		return $this->update($event, $request);
 	}
-	
+
 	/**
 	 * TODO: atualiza um endereço de um evento ou de um usuário
 	 * TODO: se existir id da cidade busca as geolocalizações

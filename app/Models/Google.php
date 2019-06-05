@@ -17,7 +17,7 @@ class Google extends Model
 			'address' => self::formatAddress($address),
 			'key' => env('GOOGLE_GEOCODE_KEY')
 		])
-        ->get();
+		->get();
 
         if (!count($response->results)) return false;
 

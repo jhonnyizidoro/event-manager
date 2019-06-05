@@ -18,4 +18,11 @@ class NotificationController extends Controller
 
         return response()->json($notifications, 200);
     }
+
+    public function read($id)
+    {
+        $notification = Auth::user()->notifications()->where('notification_id', $id)->first();
+        $notification->pivot->update(['is_read' => true]);
+        return response()->json('Notificação marcada como lida.', 200);
+    }
 }

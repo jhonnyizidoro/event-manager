@@ -55,8 +55,7 @@ class UserController extends Controller
     public function me()
     {
 		$user = Auth::user();
-		$user->address = Auth::user()->address;
-		$user->profile = Auth::user()->profile;
+		$user->profile;
 		return json($user, 'Busca realizada com sucesso.');
     }
 
