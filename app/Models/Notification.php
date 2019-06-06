@@ -14,7 +14,7 @@ class Notification extends Model
 
 	public function users()
 	{
-		return $this->belongsToMany('App\Models\User', 'user_notifications', 'notification_id', 'user_id');
+		return $this->belongsToMany('App\Models\User', 'user_notifications', 'notification_id', 'user_id')->withPivot(['is_read', 'is_hidden']);
 	}
 
 	public function send(User $user)

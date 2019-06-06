@@ -15,7 +15,6 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
 			$table->bigIncrements('id');
-			$table->boolean('is_hidden')->default(false);
 			$table->text('text');
 			$table->string('link')->nullable();
             $table->timestamps();

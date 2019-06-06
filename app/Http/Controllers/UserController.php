@@ -243,7 +243,7 @@ class UserController extends Controller
 
     public function notifications()
     {
-        $notifications = Auth::user()->notifications()->latest()->get();
+        $notifications = Auth::user()->notifications()->where('is_hidden', false)->latest()->get();
         return response()->json($notifications, 200);
     }
 

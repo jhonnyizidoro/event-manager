@@ -23,8 +23,7 @@ class CreateUserNotificationsTable extends Migration
             $table->foreign('notification_id')->references('id')->on('notifications');
 
             $table->boolean('is_read')->default(false);
-
-            $table->timestamps();
+			$table->boolean('is_hidden')->default(false);
         });
     }
 
