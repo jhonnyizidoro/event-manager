@@ -111,7 +111,7 @@ class User extends Authenticatable implements JWTSubject
 
 	public function notifications()
 	{
-		return $this->belongsToMany('App\Models\Notification', 'user_notifications', 'user_id', 'notification_id')->withPivot(['is_read', 'is_hiddesn']);
+		return $this->belongsToMany('App\Models\Notification', 'user_notifications', 'user_id', 'notification_id')->withPivot(['is_read', 'is_hidden']);
 	}
 
 	public function events_administered()
