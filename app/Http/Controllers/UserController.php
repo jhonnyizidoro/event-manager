@@ -15,10 +15,21 @@ use App\Helpers\File;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Auth;
 
 class UserController extends Controller
 {
+
+    protected static function getTokenInfo($token)
+    {
+        return [
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => Auth::factory()->getTTL() * 60
+        ];
+    }
+
     /**
      * TODO: Lista todos os usuários
      * @return Resource: todos os usuários
@@ -35,18 +46,26 @@ class UserController extends Controller
      */
     public function store(NewUserRequest $request)
     {
-		//Endereço
-		$address = Address::create();
+        try {
+            //Endereço
+            $address = Address::create();
 
-		//Cria usuário e vincula endereço à ele
-		$request->merge(['address_id' => $address->id]);
-		$user = User::create($request->except(['is_admin']));
+            //Cria usuário e vincula endereço à ele
+            $request->merge(['address_id' => $address->id]);
+            $user = User::create($request->except(['is_admin']));
 
-		//Cria perfil e preferências
-		UserProfile::create(['user_id' => $user->id]);
-		UserPreference::create(['user_id' => $user->id]);
+            //Cria perfil e preferências
+            UserProfile::create(['user_id' => $user->id]);
+            UserPreference::create(['user_id' => $user->id]);
 
-		return json($user, 'Usuário Cadastrado com sucesso.');
+            $credentials = $request->only(['email', 'password']);
+            $token = Auth::attempt($credentials);
+
+            return json(self::getTokenInfo($token), 'Login efetuado com sucesso.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['msg' => 'Erro ao tentar realizar o cadastro.'], 500);
+        }
     }
 
     /**
