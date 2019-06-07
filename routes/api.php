@@ -117,6 +117,7 @@ Route::prefix('post')->group(function() {
 	Route::post('', 'PostController@store')->middleware('auth');
 	Route::put('{id}', 'PostController@update')->middleware('auth');
 	Route::post('{id}/comment', 'PostController@addComment')->middleware('auth');
+	Route::get('{id}/comment', 'PostController@comments')->middleware('auth');
 });
 
 Route::prefix('serie')->group(function() {
