@@ -125,4 +125,18 @@ class PostController extends Controller
 
         return response()->json($posts, 200);
     }
+
+    public function comments($id)
+    {
+        $post = Post::findOrFail($id);
+        $comments = $post->comments()->with([
+            'user:id,name',
+            'user.profile:id,picture,user_id',
+            'replies:id,text,user_id,commentable_id,created_at',
+            'replies.user:id,name',
+            'replies.user.profile:id,picture,user_id'
+        ])->get();
+
+        return response()->json($comments, 200);
+    }
 }
