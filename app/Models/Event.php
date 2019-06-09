@@ -4,12 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Notification;
+use Auth;
 
 class Event extends Model
 {
 	protected $fillable = [
 		'address_id', 'category_id', 'cover', 'description', 'ends_at', 'event_serie_id', 'is_active', 'is_certified', 'min_age', 'name', 'starts_at', 'user_id',
-    ];
+	];
+
+	protected $appends = [
+		'is_following'
+	];
+
+	public function getIsFollowingAttribute()
+	{
+		if (is_null(Auth::user())) return false;
+		return Auth::user()->events_followed->contains($this);
+	}
 
     public function owner()
     {

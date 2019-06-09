@@ -93,7 +93,7 @@ class EventController extends Controller
             'owner:id,name,nickname',
             'owner.profile'
         ])->findOrFail($id);
-		return json($event, 'Evento encontrado.');
+		return response()->json($event, 200);
     }
 
     /**

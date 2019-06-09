@@ -8,6 +8,7 @@ use App\Models\UserProfile;
 use App\Models\Address;
 use App\Models\Follow;
 use App\Models\Category;
+use App\Models\Event;
 use App\Http\Requests\User\NewUser as NewUserRequest;
 use App\Http\Requests\User\UpdateUser as UpdateUserRequest;
 use App\Http\Requests\UserProfile\UpdateUserProfile as UpdateUserProfileRequest;
@@ -269,10 +270,50 @@ class UserController extends Controller
     public function events()
     {
         $events = Auth::user()->events()->with([
-            'address',
-            'address.city',
-            'address.city.state'
+            'address:id,street,number,neighborhood,city_id',
+            'address.city:id,name,state_id',
+            'address.city.state:id,name,code',
+            'owner:id,name,nickname',
+            'owner.profile:id,cover,picture,user_id'
         ])->orderBy('starts_at', 'asc')->where('is_active', true)->get();
+
+        return response()->json($events, 200);
+    }
+
+    public function managedEvents()
+    {
+        $managedEvents = Auth::user()->events_administered()->with([
+            'address:id,street,number,neighborhood,city_id',
+            'address.city:id,name,state_id',
+            'address.city.state:id,name,code',
+            'owner:id,name,nickname',
+            'owner.profile:id,cover,picture,user_id'
+        ])->orderBy('starts_at', 'asc')->where('is_active', true)->get();
+
+        $managedThroughStaff = Event::whereHas('staffs', function($q) {
+            $q->whereIn('staffs.id', Auth::user()->member_staffs()->pluck('staff.id')->toArray());
+        })->with([
+            'address:id,street,number,neighborhood,city_id',
+            'address.city:id,name,state_id',
+            'address.city.state:id,name,code',
+            'owner:id,name,nickname',
+            'owner.profile:id,cover,picture,user_id'
+        ])->orderBy('starts_at', 'asc')->where('is_active', true)->get();
+
+        $managedEvents = $managedEvents->merge($managedThroughStaff);
+
+        return response()->json($managedEvents, 200);
+    }
+
+    public function followedEvents()
+    {
+        $events = Auth::user()->events_followed()->with([
+            'address:id,street,number,neighborhood,city_id',
+            'address.city:id,name,state_id',
+            'address.city.state:id,name,code',
+            'owner:id,name,nickname',
+            'owner.profile:id,cover,picture,user_id'
+        ])->get();
 
         return response()->json($events, 200);
     }

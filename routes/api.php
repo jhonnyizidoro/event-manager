@@ -35,6 +35,8 @@ Route::prefix('user')->group(function() {
 	Route::get('notifications', 'UserController@notifications')->middleware('auth');
 
 	Route::get('events', 'UserController@events')->middleware('auth');
+	Route::get('events-followed', 'UserController@followedEvents')->middleware('auth');
+	Route::get('events-managed', 'UserController@managedEvents')->middleware('auth');
 });
 
 //Rotas de gerênciamento de endereço
