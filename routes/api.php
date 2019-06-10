@@ -142,7 +142,7 @@ Route::prefix('interest')->group(function() {
 	Route::get('search', 'CategoryController@searchInterest')->middleware('auth');
 });
 
-Route::get('search/{query}', 'SearchController@search')->middleware('auth');
+Route::get('search', 'SearchController@search')->middleware('auth');
 
 Route::prefix('notification')->group(function() {
 	Route::post('read-all', 'NotificationController@readAll')->middleware('auth');

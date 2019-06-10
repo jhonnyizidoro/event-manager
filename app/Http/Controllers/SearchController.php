@@ -9,13 +9,37 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    public function search($query)
+    public function search(Request $request)
     {
-        $users = User::with('profile')
-                    ->where('name', 'like', "%$query%")
-                    ->orWhere('email', 'like', "%$query%")
-                    ->orWhere('nickname', 'like', "%$query%")->get();
+        $term = $request->get('term');
 
-        return response(['users' => $users], 200);
+        $users = User::with('profile')
+                    ->where('name', 'like', "%$term%")
+                    ->orWhere('email', 'like', "%$term%")
+                    ->orWhere('nickname', 'like', "%$term%")->get();
+
+        $events = Event::with([
+            'address',
+            'address.city',
+            'address.city.state',
+            'owner',
+            'owner.profile'
+        ])->where('is_active', true)->where(function($query) use ($term) {
+            $query->where('name', 'like', "%$term%")
+                  ->orWhere('description', 'like', "%$term%")
+                  ->orWhereHas('owner', function($query) use ($term) { $query->where('name', 'like', "%$term%")->orWhere('nickname', 'like', "%$term%"); })
+                  ->orWhereHas('serie', function($query) use ($term) { $query->where('name', 'like', "%$term%"); })
+                  ->orWhereHas('address', function($query) use ($term) {
+                        $query->where('name', 'like', "%$term%")
+                        ->orWhereHas('city', function ($query) use ($term) {
+                            $query->where('name', 'like', "%$term%")
+                                ->orWhereHas('state', function($query) use ($term) {
+                                    $query->where('name', 'like', "%$term%");
+                                });
+                        });
+                  });
+        })->get();
+
+        return response()->json(['users' => $users, 'events' => $events], 200);
     }
 }

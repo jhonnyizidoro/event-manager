@@ -22,6 +22,13 @@ class Event extends Model
 		return Auth::user()->events_followed->contains($this);
 	}
 
+	public function getCoverAttribute($image)
+    {
+		if ($image) {
+			return env('AWS_URL') . $image;
+		}
+	}
+
     public function owner()
     {
         return $this->belongsTo('App\Models\User', 'user_id');
@@ -30,13 +37,6 @@ class Event extends Model
 	public function certificate()
 	{
 		return $this->hasOne('App\Models\Certificate');
-	}
-
-	public function getCoverAttribute($image)
-    {
-		if ($image) {
-			return env('AWS_URL') . $image;
-		}
 	}
 
 	public function address()
@@ -62,6 +62,11 @@ class Event extends Model
 	public function category()
 	{
 		return $this->belongsTo('App\Models\Category');
+	}
+
+	public function serie()
+	{
+		return $this->belongsTo('App\Models\EventSerie', 'event_serie_id');
 	}
 
 	public static function boot()
