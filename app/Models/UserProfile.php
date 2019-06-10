@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class UserProfile extends Model
 {
@@ -31,30 +32,30 @@ class UserProfile extends Model
 		}
 	}
 
-	public function user()
-	{
-		return $this->belongsTo('App\Models\User');
-	}
-
 	public function getFollowersCountAttribute()
 	{
-		return $this->user->followers->count();
+		return DB::table('follows')->where([ 'followable_type' => App\Models\User::class, 'followable_id' => $this->user->id ])->count();
 	}
 
 	public function getFollowingsCountAttribute()
 	{
-		return $this->user->followings->count();
+		return DB::table('follows')->where([ 'followable_type' => App\Models\User::class, 'user_id' => $this->user->id ])->count();
 	}
 
 	public function getPostsCountAttribute()
 	{
-		return $this->user->posts->count();
+		return DB::table('posts')->where([ 'user_id' => $this->user->id ])->count();
     }
 
     public function getEventsCountAttribute()
     {
-        return $this->user->events->count();
-    }
+		return DB::table('events')->where([ 'user_id' => $this->user->id ])->count();
+	}
+
+	public function user()
+	{
+		return $this->belongsTo('App\Models\User');
+	}
 
     public function posts()
     {

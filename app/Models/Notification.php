@@ -24,7 +24,7 @@ class Notification extends Model
 		->withTimeout(2)
 		->withHeader("Authorization: key=" . env('FIREBASE_FCM_KEY'))
 		->withData([
-			'to' => $user->fcm_mobile_token,
+			'to' => $user->fcm_web_token,
 			'notification' => [
 				'title' => 'EVENTA',
 				'body' => $this->text

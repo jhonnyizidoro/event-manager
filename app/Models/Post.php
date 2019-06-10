@@ -24,6 +24,7 @@ class Post extends Model
 
 	public function getIsOwnerAttribute()
 	{
+        if (is_null(Auth::user())) return false;
 		return $this->user_id == Auth::user()->id;
 	}
 
