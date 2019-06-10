@@ -201,15 +201,17 @@ class UserController extends Controller
         return json($users, 'Usuários buscados.');
     }
 
-    public function getFollowers()
+    public function getFollowers($user_id = null)
     {
-        $users = Auth::user()->followers()->with('address.city.state', 'profile')->get();
+        $user = is_null($user_id) ? Auth::user($user_id) : User::find($user_id);
+        $users = $user->followers()->with('address.city.state', 'profile')->get();
         return json($users, 'Seguidores buscados');
     }
 
-    public function getFollowings()
+    public function getFollowings($user_id = null)
     {
-        $users = Auth::user()->followings()->with('address.city.state', 'profile')->get();
+        $user = is_null($user_id) ? Auth::user($user_id) : User::find($user_id);
+        $users = $user->followings()->with('address.city.state', 'profile')->get();
         return json($users, 'Seguidores buscados.');
     }
 
@@ -267,9 +269,10 @@ class UserController extends Controller
         return response()->json($notifications, 200);
     }
 
-    public function events()
+    public function events($user_id = null)
     {
-        $events = Auth::user()->events()->with([
+        $user = is_null($user_id) ? Auth::user($user_id) : User::find($user_id);
+        $events = $user->events()->with([
             'address:id,street,number,neighborhood,city_id',
             'address.city:id,name,state_id',
             'address.city.state:id,name,code',
@@ -316,5 +319,15 @@ class UserController extends Controller
         ])->get();
 
         return response()->json($events, 200);
+    }
+
+    public function posts($user_id = null)
+    {
+        $user = is_null($user_id) ? Auth::user($user_id) : User::find($user_id);
+        $posts = $user->posts()->with([
+            'user',
+            'user.profile'
+        ])->latest()->get();
+        return response()->json($posts, 200);
     }
 }

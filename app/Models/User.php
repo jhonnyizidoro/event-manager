@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Carbon\Carbon;
 use Hash;
+use Auth;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -15,6 +16,10 @@ class User extends Authenticatable implements JWTSubject
 
 	protected $hidden = [
 		'password'
+	];
+
+	protected $appends = [
+		'is_following'
 	];
 
 	public function getJWTIdentifier()
@@ -37,6 +42,11 @@ class User extends Authenticatable implements JWTSubject
 		if ($date) {
 			return Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
 		}
+	}
+	public function getIsFollowingAttribute()
+	{
+		if (is_null(Auth::user())) return false;
+		return Auth::user()->followings->contains($this);
 	}
 
 	public function getCreatedAtAttribute($date)

@@ -13,7 +13,8 @@ class UserProfile extends Model
 	protected $appends = [
 		'followers_count',
 		'followings_count',
-		'posts_count'
+        'posts_count',
+        'events_count'
 	];
 
 	public function getPictureAttribute($picture)
@@ -48,6 +49,11 @@ class UserProfile extends Model
 	public function getPostsCountAttribute()
 	{
 		return $this->user->posts->count();
+    }
+
+    public function getEventsCountAttribute()
+    {
+        return $this->user->events->count();
     }
 
     public function posts()
