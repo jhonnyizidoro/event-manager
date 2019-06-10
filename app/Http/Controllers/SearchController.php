@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Auth;
 
 class SearchController extends Controller
 {
@@ -14,9 +15,12 @@ class SearchController extends Controller
         $term = $request->get('term');
 
         $users = User::with('profile')
-                    ->where('name', 'like', "%$term%")
-                    ->orWhere('email', 'like', "%$term%")
-                    ->orWhere('nickname', 'like', "%$term%")->get();
+                    ->where('id', '!=', Auth::user()->id)
+                    ->where(function($query) use ($term) {
+                        $query->where('name', 'like', "%$term%")
+                        ->orWhere('email', 'like', "%$term%")
+                        ->orWhere('nickname', 'like', "%$term%");
+                    })->get();
 
         $events = Event::with([
             'address',
