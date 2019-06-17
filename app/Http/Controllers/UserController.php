@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Auth;
 
 class UserController extends Controller
@@ -169,7 +170,15 @@ class UserController extends Controller
 
         Auth::user()->update(['password' => $request->post('password')]);
         return response()->json('Senha atualizada com sucesso.', 200);
-    }
+	}
+	
+	public function resetPassword(Request $request)
+	{
+		$user = User::find($request->user_id);
+		$user->password = $newPassword = Str::random(16);
+		$user->update();
+		return json($newPassword, 'Senha gerada com sucesso.');
+	}
 
     public function saveFcmWebToken(Request $request)
     {
@@ -271,8 +280,9 @@ class UserController extends Controller
         return response()->json($notifications, 200);
     }
 
-    public function events($user_id = null)
+    public function events($search = '', $user_id = null)
     {
+		die(json_encode($search));
         $user = is_null($user_id) ? Auth::user($user_id) : User::find($user_id);
         $events = $user->events()->with([
             'address:id,street,number,neighborhood,city_id',

@@ -43,8 +43,8 @@ class NewEvent extends FormRequest
             'address.complement' => 'string|max:191',
             'address.zip_code' => 'required',
             'certificate.name' => 'string|max:191',
-            'certificate.logo' => new Base64Image,
-            'certificate.signature' => new Base64Image
+            'certificate.logo' => [new Base64Image, 'nullable'],
+            'certificate.signature' => [new Base64Image, 'nullable']
         ];
 	}
 

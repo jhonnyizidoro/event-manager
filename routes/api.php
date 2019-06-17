@@ -15,6 +15,7 @@ Route::prefix('user')->group(function() {
 	Route::put('', 'UserController@update')->middleware('auth');
 	Route::delete('{user_id}', 'UserController@destroy')->middleware('auth');
 	Route::put('password', 'UserController@updatePassword')->middleware('auth');
+	Route::put('password/reset', 'UserController@resetPassword')->middleware('admin');
 
 	Route::get('address', 'UserController@address')->middleware('auth');
 	Route::get('profile', 'UserController@profile')->middleware('auth');

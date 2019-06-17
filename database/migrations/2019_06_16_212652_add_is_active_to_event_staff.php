@@ -14,7 +14,7 @@ class AddIsActiveToEventStaff extends Migration
     public function up()
     {
         Schema::table('event_staff', function (Blueprint $table) {
-            $table->boolean('is_active')->boolean(true);
+            $table->boolean('is_active')->default(true);
         });
     }
 
