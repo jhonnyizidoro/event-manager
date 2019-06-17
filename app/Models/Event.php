@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use App\Models\Notification;
 use Auth;
 
@@ -19,7 +20,7 @@ class Event extends Model
 	public function getIsFollowingAttribute()
 	{
 		if (is_null(Auth::user())) return false;
-		return Auth::user()->events_followed->contains($this);
+		return DB::table('follows')->where([ 'followable_type' => Event::class, 'followable_id' => $this->id, 'user_id' => Auth::user()->id ])->exists();
 	}
 
 	public function getCoverAttribute($image)
@@ -46,12 +47,12 @@ class Event extends Model
 
     public function staffs()
     {
-        return $this->belongsToMany('App\Models\Staff', 'event_staff', 'event_id', 'staff_id');
+        return $this->belongsToMany('App\Models\Staff', 'event_staff', 'event_id', 'staff_id')->withPivot('is_active');
     }
 
     public function administrators()
     {
-        return $this->belongsToMany('App\Models\User', 'event_administrators', 'event_id', 'user_id');
+        return $this->belongsToMany('App\Models\User', 'event_administrators', 'event_id', 'user_id')->withPivot('is_active');
     }
 
 	public function followers()

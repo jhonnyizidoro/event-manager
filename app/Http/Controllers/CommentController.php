@@ -22,4 +22,19 @@ class CommentController extends Controller
 
         return response()->json($model, 200);
     }
+
+    public function like($id)
+    {
+        $comment = Comment::findOrFail($id);
+
+        $likes = Auth::user()->comments_liked()->where('likeable_id', $comment->id)->first();
+
+        if (!is_null($likes)) {
+            $likes->pivot->delete();
+        } else {
+            Auth::user()->comments_liked()->save($comment);
+        }
+
+        return response()->json('Comentário curtido/descurtido com sucesso', 200);
+    }
 }

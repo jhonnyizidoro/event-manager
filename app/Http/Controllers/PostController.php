@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Comment;
+use App\Models\Follow;
 use Illuminate\Http\Request;
 use App\Http\Requests\Post\NewPost as NewPostRequest;
 use Auth;
@@ -138,5 +139,20 @@ class PostController extends Controller
         ])->get();
 
         return response()->json($comments, 200);
+    }
+
+    public function like($id)
+    {
+        $post = Post::findOrFail($id);
+
+        $likes = Auth::user()->posts_liked()->where('likeable_id', $post->id)->first();
+
+        if (!is_null($likes)) {
+            $likes->pivot->delete();
+        } else {
+            Auth::user()->posts_liked()->save($post);
+        }
+
+        return response()->json('Post curtido/descurtido com sucesso', 200);
     }
 }

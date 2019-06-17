@@ -100,6 +100,8 @@ class UserController extends Controller
         if (!is_null($user->preference))
             $user->preference->update($request->all());
 
+        $user->profile;
+
 		return json($user, 'Usuário atualizado com sucesso.');
     }
 

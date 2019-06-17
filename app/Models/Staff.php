@@ -17,7 +17,7 @@ class Staff extends Model
 
     public function members()
 	{
-		return $this->belongsToMany('App\Models\User', 'user_staff', 'staff_id', 'user_id');
+		return $this->belongsToMany('App\Models\User', 'user_staff', 'staff_id', 'user_id')->withPivot('is_active');
     }
 
     public function events()

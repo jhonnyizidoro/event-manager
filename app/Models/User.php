@@ -101,7 +101,7 @@ class User extends Authenticatable implements JWTSubject
 
 	public function member_staffs()
 	{
-		return $this->belongsToMany('App\Models\Staff', 'user_staff', 'user_id', 'staff_id');
+		return $this->belongsToMany('App\Models\Staff', 'user_staff', 'user_id', 'staff_id')->withPivot('is_active');
 	}
 
 	public function followings()
@@ -132,5 +132,15 @@ class User extends Authenticatable implements JWTSubject
 	public function events_followed()
 	{
 		return $this->morphedByMany('App\Models\Event', 'followable', 'follows', 'user_id');
+	}
+
+	public function posts_liked()
+	{
+		return $this->morphedByMany('App\Models\Post', 'likeable', 'likes', 'user_id');
+	}
+
+	public function comments_liked()
+	{
+		return $this->morphedByMany('App\Models\Comment', 'likeable', 'likes', 'user_id');
 	}
 }

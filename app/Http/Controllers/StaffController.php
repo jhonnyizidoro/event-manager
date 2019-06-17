@@ -48,7 +48,9 @@ class StaffController extends Controller
     public function members($id)
     {
         $staff = Staff::findOrFail($id);
-        return json($staff->members, 'Membros listados.');
+        $members = $staff->members()->wherePivot('is_active', true)->get();
+
+        return json($members, 'Membros listados.');
     }
 
     public function addMember($id)
@@ -57,10 +59,16 @@ class StaffController extends Controller
             $user = User::where('email', request('email'))->first();
             $staff = Staff::findOrFail($id);
 
-            if ($staff->owner->is($user) || $staff->members->contains($user)) {
+            if ($staff->owner->is($user) || $staff->members()->wherePivot('is_active', true)->get()->contains($user)) {
                 return response()->json([], 'Membro não pode ser adicionado à equipe.')->setStatusCode(500);
             }
 
+            if ($staff->members->contains($user)) {
+                $model = $staff->members()->where('user_id', $user->id)->wherePivot('is_active', false)->first();
+                $model->pivot->is_active = true;
+            } else {
+                $staff->members()->save($user);
+            }
 
             $staff->members()->save($user);
             return json($user, 'Membro adicionado.');
@@ -72,7 +80,7 @@ class StaffController extends Controller
     public function removeMember($id, $user_id)
     {
         $staff = Staff::findOrFail($id);
-        $staff->members()->find($user_id)->pivot->delete();
+        $staff->members()->find($user_id)->pivot->update([ 'is_active' => false ]);
 
         return json([], 'Membro removido');
     }

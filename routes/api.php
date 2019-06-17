@@ -127,6 +127,7 @@ Route::prefix('post')->group(function() {
 	Route::put('{id}', 'PostController@update')->middleware('auth');
 	Route::post('{id}/comment', 'PostController@addComment')->middleware('auth');
 	Route::get('{id}/comment', 'PostController@comments')->middleware('auth');
+	Route::put('{id}/like', 'PostController@like')->middleware('auth');
 });
 
 Route::prefix('serie')->group(function() {
@@ -151,6 +152,7 @@ Route::prefix('notification')->group(function() {
 
 Route::prefix('comment')->group(function() {
 	Route::post('{id}/reply', 'CommentController@addReply')->middleware('auth');
+	Route::put('{id}/like', 'CommentController@like')->middleware('auth');
 });
 
 Route::get('is-email-valid', 'UserProfileController@isEmailValid')->middleware('auth');

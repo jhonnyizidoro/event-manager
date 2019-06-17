@@ -34,12 +34,12 @@ class UserProfile extends Model
 
 	public function getFollowersCountAttribute()
 	{
-		return DB::table('follows')->where([ 'followable_type' => App\Models\User::class, 'followable_id' => $this->user->id ])->count();
+		return DB::table('follows')->where([ 'followable_type' => \App\Models\User::class, 'followable_id' => $this->user->id ])->count();
 	}
 
 	public function getFollowingsCountAttribute()
 	{
-		return DB::table('follows')->where([ 'followable_type' => App\Models\User::class, 'user_id' => $this->user->id ])->count();
+		return DB::table('follows')->where([ 'followable_type' => \App\Models\User::class, 'user_id' => $this->user->id ])->count();
 	}
 
 	public function getPostsCountAttribute()
