@@ -99,7 +99,8 @@ class UserProfileController extends Controller
                 'comments.user.profile:id,picture,user_id',
                 'comments.replies:id,text,user_id,commentable_id,created_at',
                 'comments.replies.user:id,name',
-                'comments.replies.user.profile:id,picture,user_id'
+                'comments.replies.user.profile:id,picture,user_id',
+                'postable'
             ])
             ->where('is_active', true)
             ->orderBy('created_at', 'desc')

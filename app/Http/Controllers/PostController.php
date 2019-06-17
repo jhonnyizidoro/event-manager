@@ -121,7 +121,8 @@ class PostController extends Controller
             'comments.user.profile:id,picture,user_id',
             'comments.replies:id,text,user_id,commentable_id,created_at',
             'comments.replies.user:id,name',
-            'comments.replies.user.profile:id,picture,user_id'
+            'comments.replies.user.profile:id,picture,user_id',
+            'postable'
         ])->whereIn('user_id', $followingsIds)->orWhere('user_id', Auth::user()->id)->latest()->paginate(10);
 
         return response()->json($posts, 200);
