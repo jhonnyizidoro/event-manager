@@ -14,13 +14,22 @@ class Event extends Model
 	];
 
 	protected $appends = [
-		'is_following'
+		'is_following', 'is_managing'
 	];
 
 	public function getIsFollowingAttribute()
 	{
 		if (is_null(Auth::user())) return false;
 		return DB::table('follows')->where([ 'followable_type' => Event::class, 'followable_id' => $this->id, 'user_id' => Auth::user()->id ])->exists();
+	}
+
+	public function getIsManagingAttribute()
+	{
+		if (is_null(Auth::user())) return false;
+		$byAdmin = DB::table('event_administrators')->where([ 'event_id' => $this->id, 'user_id' => Auth::user()->id, 'is_active' => true ])->exists();
+		$staffIds = DB::table('user_staff')->where([ 'user_id' => Auth::user()->id ])->pluck('staff_id')->toArray();
+		$byStaff = DB::table('event_staff')->where([ 'event_id' => $this->id ])->whereIn('staff_id', $staffIds)->exists();
+		return $byAdmin || $byStaff;
 	}
 
 	public function getCoverAttribute($image)

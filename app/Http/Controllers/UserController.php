@@ -275,7 +275,7 @@ class UserController extends Controller
     {
         $user = is_null($user_id) ? Auth::user($user_id) : User::find($user_id);
         $events = $user->events()->with([
-            'address:id,street,number,neighborhood,city_id',
+            'address:id,street,number,neighborhood,city_id,name',
             'address.city:id,name,state_id',
             'address.city.state:id,name,code',
             'owner:id,name,nickname',
@@ -288,22 +288,22 @@ class UserController extends Controller
     public function managedEvents()
     {
         $managedEvents = Auth::user()->events_administered()->with([
-            'address:id,street,number,neighborhood,city_id',
+            'address:id,street,number,neighborhood,city_id,name',
             'address.city:id,name,state_id',
             'address.city.state:id,name,code',
             'owner:id,name,nickname',
             'owner.profile:id,cover,picture,user_id'
-        ])->orderBy('starts_at', 'asc')->where('is_active', true)->get();
+        ])->orderBy('starts_at', 'asc')->where(['events.is_active' => true])->get();
 
         $managedThroughStaff = Event::whereHas('staffs', function($q) {
             $q->whereIn('staffs.id', Auth::user()->member_staffs()->pluck('staff.id')->toArray());
         })->with([
-            'address:id,street,number,neighborhood,city_id',
+            'address:id,street,number,neighborhood,city_id,name',
             'address.city:id,name,state_id',
             'address.city.state:id,name,code',
             'owner:id,name,nickname',
             'owner.profile:id,cover,picture,user_id'
-        ])->orderBy('starts_at', 'asc')->where('is_active', true)->get();
+        ])->orderBy('starts_at', 'asc')->where(['events.is_active' => true])->get();
 
         $managedEvents = $managedEvents->merge($managedThroughStaff);
 
@@ -313,7 +313,7 @@ class UserController extends Controller
     public function followedEvents()
     {
         $events = Auth::user()->events_followed()->with([
-            'address:id,street,number,neighborhood,city_id',
+            'address:id,street,number,neighborhood,city_id,name',
             'address.city:id,name,state_id',
             'address.city.state:id,name,code',
             'owner:id,name,nickname',
@@ -328,7 +328,8 @@ class UserController extends Controller
         $user = is_null($user_id) ? Auth::user($user_id) : User::find($user_id);
         $posts = $user->posts()->with([
             'user',
-            'user.profile'
+            'user.profile',
+            'postable'
         ])->latest()->get();
         return response()->json($posts, 200);
     }
