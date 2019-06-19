@@ -36,9 +36,9 @@ class UserController extends Controller
      * TODO: Lista todos os usuários
      * @return Resource: todos os usuários
      */
-    public function index()
+    public function index($search = '')
     {
-		$users = User::paginate(10);
+		$users = User::where('name', 'LIKE', "%{$search}%")->orWhere('email', 'LIKE', "%{$search}%")->paginate(10);
         return json($users, 'Usuários listados com sucesso.');
     }
 

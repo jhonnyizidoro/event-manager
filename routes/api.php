@@ -9,7 +9,7 @@ Route::prefix('auth')->group(function() {
 
 //Rotas de gerênciamento de usuários
 Route::prefix('user')->group(function() {
-	Route::get('', 'UserController@index')->middleware('admin');
+	Route::get('get/{search?}', 'UserController@index')->middleware('admin');
 	Route::post('', 'UserController@store');
 	Route::get('me', 'UserController@me')->middleware('auth');
 	Route::put('', 'UserController@update')->middleware('auth');
@@ -55,9 +55,8 @@ Route::prefix('address')->group(function() {
 
 //Rotas para gerenciamento das cidades
 Route::prefix('city')->group(function() {
-	Route::get('', 'CityController@index');
+	Route::get('{search?}', 'CityController@index');
 	Route::post('', 'CityController@store')->middleware('admin');
-	Route::get('{city_id}', 'CityController@show');
 	Route::put('', 'CityController@update')->middleware('admin');
 	Route::delete('{city_id}', 'CityController@destroy')->middleware('admin');
 });

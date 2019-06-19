@@ -12,9 +12,9 @@ class CityController extends Controller
     /**
      * @return Resource paginação de todas as cidades
      */
-    public function index()
+    public function index($search = '')
     {
-		$cities = City::with('state')->paginate(10);
+		$cities = City::where('name', 'LIKE', "%{$search}%")->with('state')->paginate(10);
 		// $cities = CityResource::collection($cities);
 		return json($cities, 'Sucesso ao buscar as cidades');
     }
