@@ -14,7 +14,8 @@ class AddShareMorphToPosts extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->morphs('shareable')->nullable();
+            $table->string('shareable_type')->nullable();
+            $table->unsignedBigInteger('shareable_id')->nullable();
         });
     }
 
