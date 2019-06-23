@@ -12,6 +12,8 @@ use App\Models\User;
 use App\Models\Staff;
 use Illuminate\Support\Facades\DB;
 use Auth;
+use Illuminate\Http\Request;
+use App\Models\Post;
 
 class EventController extends Controller
 {
@@ -91,7 +93,13 @@ class EventController extends Controller
             'address.city:id,name,state_id',
             'address.city.state:id,name,code',
             'owner:id,name,nickname',
-            'owner.profile'
+			'owner.profile',
+			'followers',
+			'followers.profile',
+			'posts',
+			'posts.user',
+			'posts.user.profile',
+			'posts.comments',
         ])->findOrFail($id);
 		return response()->json($event, 200);
     }
@@ -135,5 +143,32 @@ class EventController extends Controller
         }
 
         return response()->json('Evento seguido/deixado de seguir.', 200);
+	}
+	
+	public function addPost(Request $request)
+    {
+        try {
+            $event = Event::findOrFail(request('id'));
+
+            if ($request->file) {
+                $request->merge([
+                    'image_path' => File::uploadBase64($request->file, 'events/pictures')
+                ]);
+            }
+
+            $post = new Post();
+            $post->fill($request->all());
+            $post->user_id = Auth::user()->id;
+
+            $event->posts()->save($post);
+            $post->user;
+            $post->user->profile;
+            $post->comments;
+
+            return response()->json($post, 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['msg' => 'Erro ao tentar salvar post.'.$e->getMessage()], 500);
+        }
     }
 }
