@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\Notification;
 use Auth;
-use Carbon;
+use Carbon\Carbon;
 
 class Event extends Model
 {
@@ -16,10 +16,6 @@ class Event extends Model
 
 	protected $appends = [
 		'is_following', 'is_managing', 'is_subscribed', 'followers_count', 'duration'
-	];
-
-	protected $dates = [
-		'starts_at', 'ends_at'
 	];
 
 	public function getIsFollowingAttribute()
@@ -57,7 +53,7 @@ class Event extends Model
 
 	public function getDurationAttribute()
 	{
-		return $this->starts_at->diffInMinutes($this->ends_at);
+		return Carbon::parse($this->starts_at)->diffInMinutes(Carbon::parse($this->ends_at));
 	}
 
     public function owner()
