@@ -94,6 +94,11 @@ Route::prefix('event')->group(function() {
 Route::prefix('certificate')->group(function() {
 	Route::get('', 'CertificateController@index')->middleware('auth');
 	Route::put('', 'CertificateController@update')->middleware('auth');
+
+	Route::get('{subscription_id}/download', 'CertificateController@download');
+
+	Route::get('user', 'CertificateController@userCertificates')->middleware('auth');
+	Route::get('{user_id}/user', 'CertificateController@userCertificates')->middleware('auth');
 });
 
 //Rotas para gerenciamento de equipes de administradores

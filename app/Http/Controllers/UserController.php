@@ -171,7 +171,7 @@ class UserController extends Controller
         Auth::user()->update(['password' => $request->post('password')]);
         return response()->json('Senha atualizada com sucesso.', 200);
 	}
-	
+
 	public function resetPassword(Request $request)
 	{
 		$user = User::find($request->user_id);
@@ -282,7 +282,6 @@ class UserController extends Controller
 
     public function events($search = '', $user_id = null)
     {
-		die(json_encode($search));
         $user = is_null($user_id) ? Auth::user($user_id) : User::find($user_id);
         $events = $user->events()->with([
             'address:id,street,number,neighborhood,city_id,name',

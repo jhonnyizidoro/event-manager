@@ -17,6 +17,10 @@ class Event extends Model
 		'is_following', 'is_managing'
 	];
 
+	protected $dates = [
+		'starts_at', 'ends_at'
+	];
+
 	public function getIsFollowingAttribute()
 	{
 		if (is_null(Auth::user())) return false;

@@ -143,4 +143,9 @@ class User extends Authenticatable implements JWTSubject
 	{
 		return $this->morphedByMany('App\Models\Comment', 'likeable', 'likes', 'user_id');
 	}
+
+	public function subscriptions()
+	{
+		return $this->hasMany('App\Models\Subscription');
+	}
 }

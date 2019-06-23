@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Certificate;
+use App\Models\Subscription;
+use App\Models\User;
 use App\Models\Event;
 use App\Helpers\File;
 use App\Http\Requests\Certificate\UpdateCertificate as UpdateCertificateRequest;
 use Auth;
+use PDF;
+use App;
 
 class CertificateController extends Controller
 {
@@ -32,5 +36,31 @@ class CertificateController extends Controller
 		]);
 		$certificate = Certificate::updateOrCreate(['event_id' => $event->id], $request->all());
 		return json($certificate, 'Certificado criado.');
+    }
+
+    public function userCertificates($id = null)
+    {
+        $user = is_null($id) ? Auth::user() : User::find($id);
+        $subscriptions = $user->subscriptions()
+            ->with('event.address.city.state', 'event.owner')
+            ->whereNotNull('check_out')
+            ->whereNotNull('check_out')
+            ->get();
+
+        return response()->json($subscriptions, 200);
+    }
+
+    public function download($subscription)
+    {
+        $subscription = Subscription::findOrFail($subscription);
+        $background = 'data:image/png;base64,' . base64_encode(file_get_contents(public_path('images/certificate-bg.png')));
+
+        $pdf = PDF::loadView('pdf.certificate', ['subscription' => $subscription, 'background' => $background])->setPaper('a4', 'landscape');
+
+        if (request('download')) {
+            return $pdf->download("eventa_certificate_$subscription->id.pdf");
+        } else {
+            return $pdf->stream("eventa_certificate_$subscription->id.pdf");
+        }
     }
 }
