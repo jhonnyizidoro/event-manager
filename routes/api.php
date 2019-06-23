@@ -45,6 +45,7 @@ Route::prefix('user')->group(function() {
 	Route::get('{user_id}/followings', 'UserController@getFollowings')->middleware('auth');
 	Route::get('{user_id}/followers', 'UserController@getFollowers')->middleware('auth');
 	Route::get('{user_id}/posts', 'UserController@posts')->middleware('auth');
+	Route::get('dashboard', 'UserController@dashboard')->middleware('auth');
 });
 
 //Rotas de gerênciamento de endereço

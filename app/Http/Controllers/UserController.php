@@ -341,5 +341,27 @@ class UserController extends Controller
             'postable'
         ])->latest()->get();
         return response()->json($posts, 200);
-    }
+	}
+	
+	public function dashboard()
+	{
+		$user = Auth::user();
+		$dashboard = (object)[];
+
+		$posts = $user
+		->posts()
+		->orderBy('created_at', 'desc')
+		->where('created_at', '>', '2019-01-01')
+		->get()
+		->groupBy(function($date) {
+			return Carbon::parse($date->created_at)->format('Y-m');
+		});
+
+		foreach ($posts as $key => $postGroup) {
+			$posts[$key] = sizeof($postGroup);
+		}
+
+		$dashboard->posts_by_date = $posts;
+		return response()->json($dashboard, 200);
+	}
 }
