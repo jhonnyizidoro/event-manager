@@ -14,7 +14,7 @@ class Event extends Model
 	];
 
 	protected $appends = [
-		'is_following', 'is_managing'
+		'is_following', 'is_managing', 'is_subscribed', 'followers_count'
 	];
 
 	protected $dates = [
@@ -34,6 +34,17 @@ class Event extends Model
 		$staffIds = DB::table('user_staff')->where([ 'user_id' => Auth::user()->id ])->pluck('staff_id')->toArray();
 		$byStaff = DB::table('event_staff')->where([ 'event_id' => $this->id ])->whereIn('staff_id', $staffIds)->exists();
 		return $byAdmin || $byStaff;
+	}
+
+	public function getFollowersCountAttribute()
+	{
+		return DB::table('follows')->where([ 'followable_type' => Event::class, 'followable_id' => $this->id ])->count();
+	}
+
+	public function getIsSubscribedAttribute()
+	{
+		if (is_null(Auth::user())) return false;
+		return DB::table('subscriptions')->where([ 'user_id' => Auth::user()->id, 'event_id' => $this->id ])->exists();
 	}
 
 	public function getCoverAttribute($image)

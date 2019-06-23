@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use YourAppRocks\EloquentUuid\Traits\HasUuid;
 
 class Subscription extends Model
 {
+	use HasUuid;
+
 	protected $fillable = [
 		'check_in', 'check_out', 'user_id', 'event_id', 'user_responsible_id'
 	];

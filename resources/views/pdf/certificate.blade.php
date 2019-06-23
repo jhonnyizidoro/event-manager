@@ -94,6 +94,16 @@
         .wrapper .signature-preview p {
             margin-top: 5px;
         }
+
+        .uuid {
+            position: absolute;
+            bottom: -130px;
+            left: 34%;
+        }
+
+        .uuid span {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -114,6 +124,8 @@
         <div class="logo-preview">
             <img src="{{ $subscription->event->certificate->logo }}">
         </div>
+
+        <p class="uuid">Código: <span>{{ $subscription->uuid }}</span></p>
     </div>
 
 </body>

@@ -9,7 +9,7 @@ use Auth;
 class Post extends Model
 {
 	protected $fillable = [
-		'text', 'image_path', 'is_active', 'postable_type', 'postable_id', 'user_id',
+		'text', 'image_path', 'is_active', 'postable_type', 'postable_id', 'user_id', 'shareable_type', 'shareable_id',
 	];
 
 	protected $appends =  [
