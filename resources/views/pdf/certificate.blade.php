@@ -74,6 +74,10 @@
         }
         .wrapper .logo-preview img {
             max-width: 200px;
+            position: absolute;
+            bottom: -520px;
+            left: 40%;
+
         }
         .wrapper .signature-preview {
             margin-top: 150px;
@@ -112,7 +116,7 @@
         <h1 class="header">CERTIFICADO DE COMPARECIMENTO</h1>
         <p class="text">
             Certificamos que <span>{{ $subscription->user->name }}</span> participou do evento <span>{{ $subscription->event->name }}</span>,
-            realizado em <span>{{ $subscription->event->address->name }}</span>, no dia <span>{{ $subscription->event->starts_at->isoFormat('D [de] MMMM [de] Y') }}</span> com carga horária de
+            realizado em <span>{{ $subscription->event->address->name }}</span>, no dia <span>{{ Carbon\Carbon::parse($subscription->event->starts_at)->isoFormat('D [de] MMMM [de] Y') }}</span> com carga horária de
             <span>{{ $duration }}</span>, organizado por <span>{{ $subscription->event->owner->name }}</span>.
         </p>
 

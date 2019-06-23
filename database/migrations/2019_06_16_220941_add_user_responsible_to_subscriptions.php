@@ -14,7 +14,7 @@ class AddUserResponsibleToSubscriptions extends Migration
     public function up()
     {
         Schema::table('subscriptions', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_responsible_id');
+            $table->unsignedBigInteger('user_responsible_id')->nullable();
             $table->foreign('user_responsible_id')->references('id')->on('users');
         });
     }

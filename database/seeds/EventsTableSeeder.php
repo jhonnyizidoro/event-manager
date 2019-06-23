@@ -12,13 +12,13 @@ class EventsTableSeeder extends Seeder
      */
     public function run()
     {
-        Event::create([
-			'name' => 'Armandinho + Hungria',
-			'starts_at' => date('Y-m-d 14:00'),
-			'ends_at' => date('Y-m-d 14:00'),
-			'user_id' => 1,
-			'category_id' => 1,
-			'address_id' => 1,
-		]);
+        // Event::create([
+		// 	'name' => 'Armandinho + Hungria',
+		// 	'starts_at' => date('Y-m-d 14:00'),
+		// 	'ends_at' => date('Y-m-d 14:00'),
+		// 	'user_id' => 1,
+		// 	'category_id' => 1,
+		// 	'address_id' => 1,
+		// ]);
     }
 }
