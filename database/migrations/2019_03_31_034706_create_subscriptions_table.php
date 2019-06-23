@@ -15,8 +15,9 @@ class CreateSubscriptionsTable extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->bigIncrements('id');
-			$table->timestamp('check_in')->useCurrent();
-			$table->timestamp('check_out')->useCurrent();
+			$table->timestamp('check_in')->nullable();
+            $table->timestamp('check_out')->nullable();
+            $table->uuid('uuid');
 			$table->timestamps();
         });
     }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\Notification;
 use Auth;
+use Carbon\Carbon;
 
 class Event extends Model
 {
@@ -14,11 +15,7 @@ class Event extends Model
 	];
 
 	protected $appends = [
-		'is_following', 'is_managing'
-	];
-
-	protected $dates = [
-		'starts_at', 'ends_at'
+		'is_following', 'is_managing', 'is_subscribed', 'followers_count', 'duration'
 	];
 
 	public function getIsFollowingAttribute()
@@ -36,11 +33,27 @@ class Event extends Model
 		return $byAdmin || $byStaff;
 	}
 
+	public function getFollowersCountAttribute()
+	{
+		return DB::table('follows')->where([ 'followable_type' => Event::class, 'followable_id' => $this->id ])->count();
+	}
+
+	public function getIsSubscribedAttribute()
+	{
+		if (is_null(Auth::user())) return false;
+		return DB::table('subscriptions')->where([ 'user_id' => Auth::user()->id, 'event_id' => $this->id ])->exists();
+	}
+
 	public function getCoverAttribute($image)
     {
 		if ($image) {
 			return env('AWS_URL') . $image;
 		}
+	}
+
+	public function getDurationAttribute()
+	{
+		return Carbon::parse($this->starts_at)->diffInMinutes(Carbon::parse($this->ends_at));
 	}
 
     public function owner()

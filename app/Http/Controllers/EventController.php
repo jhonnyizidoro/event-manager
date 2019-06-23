@@ -10,6 +10,7 @@ use App\Models\Event;
 use App\Models\Certificate;
 use App\Models\User;
 use App\Models\Staff;
+use App\Models\Subscription;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use Illuminate\Http\Request;
@@ -170,5 +171,23 @@ class EventController extends Controller
         } catch (\Exception $e) {
             return response()->json(['msg' => 'Erro ao tentar salvar post.'.$e->getMessage()], 500);
         }
+    }
+
+    public function subscribe($id)
+    {
+        $event = Event::findOrFail($id);
+
+        $subscription = Auth::user()->subscriptions()->where('event_id', $event->id)->whereNull('check_in')->whereNull('check_out')->first();
+
+        if (is_null($subscription)) {
+            $model = new Subscription();
+            $model->event_id = $event->id;
+
+            Auth::user()->subscriptions()->save($model);
+        } else {
+            $subscription->delete();
+        }
+
+        return response()->json('Inscrição realizada/excluída', 200);
     }
 }

@@ -156,4 +156,21 @@ class PostController extends Controller
 
         return response()->json('Post curtido/descurtido com sucesso', 200);
     }
+
+    public function share($id)
+    {
+        $post = Post::findOrFail($id);
+
+        $newPost = new Post();
+        $newPost->fill([
+            'user_id' => Auth::user()->id,
+            'shareable_type' => Post::class,
+            'shareable_id' => $post->id,
+            'text' => ''
+        ]);
+
+        Auth::user()->profile->posts()->save($newPost);
+
+        return response()->json(['msg' => 'Post compartilhado na TL com sucesso.'], 201);
+    }
 }

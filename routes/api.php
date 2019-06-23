@@ -89,6 +89,7 @@ Route::prefix('event')->group(function() {
 	Route::put('', 'EventController@update')->middleware('auth');
 	Route::delete('{event_id}', 'EventController@destroy')->middleware('auth');
 	Route::put('{event_id}/follow', 'EventController@follow')->middleware('auth');
+	Route::put('{event_id}/subscribe', 'EventController@subscribe')->middleware('auth');
 	Route::put('{id}/post', 'EventController@addPost')->middleware('auth');
 });
 
@@ -135,6 +136,7 @@ Route::prefix('post')->group(function() {
 	Route::post('{id}/comment', 'PostController@addComment')->middleware('auth');
 	Route::get('{id}/comment', 'PostController@comments')->middleware('auth');
 	Route::put('{id}/like', 'PostController@like')->middleware('auth');
+	Route::post('{id}/share', 'PostController@share')->middleware('auth');
 });
 
 Route::prefix('serie')->group(function() {
