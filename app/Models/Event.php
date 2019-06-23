@@ -141,4 +141,9 @@ class Event extends Model
 			}
 		}
 	}
+
+	public function posts()
+    {
+        return $this->morphMany('App\Models\Post', 'postable');
+    }
 }
