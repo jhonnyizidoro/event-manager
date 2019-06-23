@@ -113,7 +113,7 @@
         <p class="text">
             Certificamos que <span>{{ $subscription->user->name }}</span> participou do evento <span>{{ $subscription->event->name }}</span>,
             realizado em <span>{{ $subscription->event->address->name }}</span>, no dia <span>{{ $subscription->event->starts_at->isoFormat('D [de] MMMM [de] Y') }}</span> com carga horária de
-            <span>2 horas</span>, organizado por <span>{{ $subscription->event->owner->name }}</span>.
+            <span>{{ $duration }}</span>, organizado por <span>{{ $subscription->event->owner->name }}</span>.
         </p>
 
         <div class="signature-preview">

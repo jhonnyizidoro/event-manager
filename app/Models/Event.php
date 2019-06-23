@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\Notification;
 use Auth;
+use Carbon;
 
 class Event extends Model
 {
@@ -14,7 +15,7 @@ class Event extends Model
 	];
 
 	protected $appends = [
-		'is_following', 'is_managing', 'is_subscribed', 'followers_count'
+		'is_following', 'is_managing', 'is_subscribed', 'followers_count', 'duration'
 	];
 
 	protected $dates = [
@@ -52,6 +53,11 @@ class Event extends Model
 		if ($image) {
 			return env('AWS_URL') . $image;
 		}
+	}
+
+	public function getDurationAttribute()
+	{
+		return $this->starts_at->diffInMinutes($this->ends_at);
 	}
 
     public function owner()

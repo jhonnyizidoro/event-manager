@@ -55,7 +55,18 @@ class CertificateController extends Controller
         $subscription = Subscription::findOrFail($subscription);
         $background = 'data:image/png;base64,' . base64_encode(file_get_contents(public_path('images/certificate-bg.png')));
 
-        $pdf = PDF::loadView('pdf.certificate', ['subscription' => $subscription, 'background' => $background])->setPaper('a4', 'landscape');
+        $time = $subscription->event->duration / 60;
+        if (intval($time) > 0) {
+            $durationString = intval($time) . ' hora' . ($time % 1 > 0 ? ' e ' . 60 * ($time % 1) . ' minutos' : '');
+        } else {
+            $durationString = 60 * ($time % 1) . ' minutos';
+        }
+
+        $pdf = PDF::loadView('pdf.certificate', [
+            'subscription' => $subscription,
+            'background' => $background,
+            'duration' => $durationString
+        ])->setPaper('a4', 'landscape');
 
         if (request('download')) {
             return $pdf->download("eventa_certificate_$subscription->id.pdf");
