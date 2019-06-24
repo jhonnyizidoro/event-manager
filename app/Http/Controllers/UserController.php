@@ -302,7 +302,11 @@ class UserController extends Controller
             'address.city.state:id,name,code',
             'owner:id,name,nickname',
             'owner.profile:id,cover,picture,user_id'
-        ])->orderBy('starts_at', 'asc')->where('events.is_active', true)->where('starts_at', '>=', Carbon::now())->get();
+        ])->orderBy('starts_at', 'asc')
+        ->where('events.is_active', true)
+        ->where('events.is_certified', true)
+        ->where('starts_at', '>=', Carbon::now()->subDays(1))
+        ->get();
 
         $managedThroughStaff = Event::whereHas('staffs', function($q) {
             $q->whereIn('staff.id', Auth::user()->member_staffs()->pluck('staff.id')->toArray());
@@ -312,7 +316,11 @@ class UserController extends Controller
             'address.city.state:id,name,code',
             'owner:id,name,nickname',
             'owner.profile:id,cover,picture,user_id'
-        ])->orderBy('starts_at', 'asc')->where('is_active', true)->where('starts_at', '>=', Carbon::now())->get();
+        ])->orderBy('starts_at', 'asc')
+        ->where('is_active', true)
+        ->where('is_certified', true)
+        ->where('starts_at', '>=', Carbon::now()->subDays(1))
+        ->get();
 
         $managedEvents = $managedEvents->merge($managedThroughStaff);
 
@@ -355,7 +363,7 @@ class UserController extends Controller
         ])->latest()->get();
         return response()->json($posts, 200);
 	}
-	
+
 	public function dashboard()
 	{
 		$user = Auth::user();

@@ -15,7 +15,7 @@ class Event extends Model
 	];
 
 	protected $appends = [
-		'is_following', 'is_managing', 'is_subscribed', 'followers_count', 'duration'
+		'is_following', 'is_managing', 'is_subscribed', 'followers_count', 'duration', 'checkinable', 'checkoutable'
 	];
 
 	public function getIsFollowingAttribute()
@@ -54,6 +54,18 @@ class Event extends Model
 	public function getDurationAttribute()
 	{
 		return Carbon::parse($this->starts_at)->diffInMinutes(Carbon::parse($this->ends_at));
+	}
+
+	public function getCheckinableAttribute()
+	{
+		$diff = Carbon::parse($this->starts_at)->diffInMinutes(Carbon::now());
+		return $diff >= -15 && $diff <= 15;
+	}
+
+	public function getCheckoutableAttribute()
+	{
+		$diff = Carbon::parse($this->ends_at)->diffInMinutes(Carbon::now());
+		return  $diff >= -15 && $diff <= 15;
 	}
 
     public function owner()

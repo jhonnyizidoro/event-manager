@@ -56,8 +56,9 @@ class CertificateController extends Controller
         $background = 'data:image/png;base64,' . base64_encode(file_get_contents(public_path('images/certificate-bg.png')));
 
         $time = $subscription->event->duration / 60;
+
         if (intval($time) > 0) {
-            $durationString = intval($time) . (intval($time) == 1 ? ' hora' : ' horas') . ($time % 1 > 0 ? ' e ' . 60 * ($time % 1) . ' minutos' : '');
+            $durationString = intval($time) . (intval($time) == 1 ? ' hora' : ' horas') . ($time - intval($time) > 0 ? ' e ' . 60 * ($time - intval($time)) . ' minutos' : '');
         } else {
             $durationString = 60 * ($time % 1) . ' minutos';
         }

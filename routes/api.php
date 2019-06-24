@@ -92,6 +92,8 @@ Route::prefix('event')->group(function() {
 	Route::put('{event_id}/follow', 'EventController@follow')->middleware('auth');
 	Route::put('{id}/post', 'EventController@addPost')->middleware('auth');
 	Route::put('{id}/subscribe', 'EventController@subscribe')->middleware('auth');
+	Route::put('{id}/checkin', 'EventController@checkin')->middleware('auth');
+	Route::put('{id}/checkout', 'EventController@checkout')->middleware('auth');
 });
 
 //Rotdas para gerenciamentos de certificados

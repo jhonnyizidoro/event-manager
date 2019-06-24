@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Auth;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -145,7 +146,7 @@ class EventController extends Controller
 
         return response()->json('Evento seguido/deixado de seguir.', 200);
 	}
-	
+
 	public function addPost(Request $request)
     {
         try {
@@ -189,5 +190,48 @@ class EventController extends Controller
         }
 
         return response()->json('Inscrição realizada/excluída', 200);
+    }
+
+    public function checkin($id)
+    {
+        $user = User::findOrFail(request('user_id'));
+        $event = Event::findOrFail($id);
+
+        $subscription = Subscription::where([
+            'user_id' => $user->id,
+            'event_id' => $event->id
+        ])->first();
+
+        if (is_null($subscription)) {
+            Subscription::create([
+                'event_id' => $event->id,
+                'user_id' => $user->id,
+                'check_in' => Carbon::now(),
+                'user_responsible_id' => Auth::user()->id
+            ]);
+        } else {
+            $subscription->update([ 'check_in' => Carbon::now(), 'user_responsible_id' => Auth::user()->id ]);
+        }
+
+        return response()->json(['msg' => 'Check-in realizado com sucesso!'], 200);
+    }
+
+    public function checkout($id)
+    {
+        $user = User::findOrFail(request('user_id'));
+        $event = Event::findOrFail($id);
+
+        $subscription = Subscription::where([
+            'user_id' => $user->id,
+            'event_id' => $event->id
+        ])->whereNotNull('check_in')->first();
+
+        if (is_null($subscription)) {
+            return response()->json(['msg' => 'Usuário não realizou Check-in.'], 200);
+        } else {
+            $subscription->update([ 'check_out' => Carbon::now() ]);
+        }
+
+        return response()->json(['msg' => 'Check-out realizado com sucesso!'], 200);
     }
 }
