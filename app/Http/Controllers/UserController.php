@@ -283,6 +283,7 @@ class UserController extends Controller
     public function events($search = '', $user_id = null)
     {
         $user = is_null($user_id) ? Auth::user($user_id) : User::find($user_id);
+
         $events = $user->events()->with([
             'address:id,street,number,neighborhood,city_id,name',
             'address.city:id,name,state_id',
@@ -359,7 +360,9 @@ class UserController extends Controller
         $posts = $user->posts()->with([
             'user',
             'user.profile',
-            'postable'
+            'postable',
+            'comments.user.profile',
+            'comments.replies'
         ])->latest()->get();
         return response()->json($posts, 200);
 	}

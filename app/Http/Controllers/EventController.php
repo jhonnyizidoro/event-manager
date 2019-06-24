@@ -234,4 +234,27 @@ class EventController extends Controller
 
         return response()->json(['msg' => 'Check-out realizado com sucesso!'], 200);
     }
+
+    public function listPosts($id)
+    {
+        $event = Event::findOrFail($id);
+
+        $posts = $event->posts()
+        ->with([
+            'user:id,name',
+            'user.profile:id,picture,user_id',
+            'comments:id,text,user_id,commentable_id,created_at',
+            'comments.user:id,name',
+            'comments.user.profile:id,picture,user_id',
+            'comments.replies:id,text,user_id,commentable_id,created_at',
+            'comments.replies.user:id,name',
+            'comments.replies.user.profile:id,picture,user_id',
+            'postable'
+        ])
+        ->where('is_active', true)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+        return response()->json($posts, 200);
+    }
 }

@@ -15,7 +15,7 @@ class Event extends Model
 	];
 
 	protected $appends = [
-		'is_following', 'is_managing', 'is_subscribed', 'followers_count', 'duration', 'checkinable', 'checkoutable'
+		'is_following', 'is_managing', 'is_subscribed', 'followers_count', 'subscribers_count', 'duration', 'checkinable', 'checkoutable'
 	];
 
 	public function getIsFollowingAttribute()
@@ -36,6 +36,11 @@ class Event extends Model
 	public function getFollowersCountAttribute()
 	{
 		return DB::table('follows')->where([ 'followable_type' => Event::class, 'followable_id' => $this->id ])->count();
+	}
+
+	public function getSubscribersCountAttribute()
+	{
+		return DB::table('subscriptions')->where([ 'event_id' => $this->id ])->count();
 	}
 
 	public function getIsSubscribedAttribute()
