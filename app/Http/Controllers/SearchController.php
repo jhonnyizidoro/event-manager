@@ -14,7 +14,10 @@ class SearchController extends Controller
     {
         $term = $request->get('term');
 
-        $users = User::with('profile')
+        $users = User::with([
+						'profile',
+						'address.city.state'
+					])
                     ->where('id', '!=', Auth::user()->id)
                     ->where(function($query) use ($term) {
                         $query->where('name', 'like', "%$term%")
