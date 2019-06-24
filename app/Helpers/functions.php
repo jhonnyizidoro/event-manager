@@ -18,3 +18,11 @@ if (!function_exists('json'))
 		], $httpCode, [], JSON_UNESCAPED_SLASHES);
 	}
 }
+
+if (!function_exists('orderByCount'))
+{
+	function orderByCount($a, $b)
+	{
+		return $a->count < $b->count;
+	}
+}

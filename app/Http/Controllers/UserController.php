@@ -346,22 +346,14 @@ class UserController extends Controller
 	public function dashboard()
 	{
 		$user = Auth::user();
-		$dashboard = (object)[];
-
-		$posts = $user
-		->posts()
-		->orderBy('created_at', 'desc')
-		->where('created_at', '>', '2019-01-01')
-		->get()
-		->groupBy(function($date) {
-			return Carbon::parse($date->created_at)->format('Y-m');
-		});
-
-		foreach ($posts as $key => $postGroup) {
-			$posts[$key] = sizeof($postGroup);
-		}
-
-		$dashboard->posts_by_date = $posts;
+		$dashboard = [
+			'postsByMonth' => $user->postsByMonth(6), //Quantidades de publicações nos últimos 6 meses
+			'userInterests' => Category::mostPopular(), //Os usuários do EVENTA estão interessados em
+			'userPosts' => $user->posts()->count(), //Publicações criadas
+			'activeEvents' => $user->events()->where('is_active', true)->count(), //Eventos ativos
+			'userLikes' => $user->posts_liked()->count() + $user->comments_liked()->count(),//Curtidas em publicações
+			'userComments' => $user->comments()->count(),//Comentários realizados
+		];
 		return response()->json($dashboard, 200);
 	}
 }

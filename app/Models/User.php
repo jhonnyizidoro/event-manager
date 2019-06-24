@@ -144,8 +144,37 @@ class User extends Authenticatable implements JWTSubject
 		return $this->morphedByMany('App\Models\Comment', 'likeable', 'likes', 'user_id');
 	}
 
+	public function comments()
+	{
+		return $this->hasMany('App\Models\Comment');	
+	}
+
 	public function subscriptions()
 	{
 		return $this->hasMany('App\Models\Subscription');
+	}
+
+	public function postsByMonth($months = 6)
+	{
+		//Buscar posts por mês
+		$postsByMonth = $this->posts()
+		->select('created_at')
+		->where('created_at', '>', date("Y-m-00", strtotime(" -{$months} month")))
+		->orderBy('created_at')
+		->get()
+		->groupBy(function($d) {
+			return Carbon::parse($d->created_at)->format('m');
+		});
+
+		$formattedPostsByMonth = [];
+
+		foreach ($postsByMonth as $key => $month) {
+			$formattedPostsByMonth[] = (object) [
+				'month' => $key,
+				'count' => sizeof($month)
+			];
+		}
+
+		return $formattedPostsByMonth;
 	}
 }
