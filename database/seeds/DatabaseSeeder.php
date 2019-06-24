@@ -17,10 +17,11 @@ class DatabaseSeeder extends Seeder
 		$this->command->info('Seeding: CitiesTableSeeder');
 		DB::unprepared(file_get_contents(__DIR__ . '/SQL/CitiesTableSeeder.sql'));
 
-		$this->call(CategoriesTableSeeder::class);
-		$this->call(ReactionsTableSeeder::class);
-		$this->call(AddressesTableSeeder::class);
-		$this->call(UsersTableSeeder::class);
-		$this->call(EventsTableSeeder::class);
+    $this->call(CategoriesTableSeeder::class);
+    $this->call(PresentationSeeder::class);
+		// $this->call(ReactionsTableSeeder::class);
+		// $this->call(AddressesTableSeeder::class);
+		// $this->call(UsersTableSeeder::class);
+		// $this->call(EventsTableSeeder::class);
     }
 }

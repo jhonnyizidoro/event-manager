@@ -18,8 +18,6 @@ class AddressesTableSeeder extends Seeder
 			'zip_code' => '80050-480',
 			'neighborhood' => 'Cristo Rei',
 			'complement' => 'AP601',
-			'latitude' => uniqid(),
-			'longitude' => uniqid(),
 			'city_id' => 2878,
         ]);
 
@@ -29,8 +27,6 @@ class AddressesTableSeeder extends Seeder
 			'zip_code' => '81250-690',
 			'neighborhood' => 'Fazendinha',
 			'complement' => null,
-			'latitude' => uniqid(),
-			'longitude' => uniqid(),
 			'city_id' => 2878,
         ]);
     }

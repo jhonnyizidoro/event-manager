@@ -57,7 +57,7 @@ class CertificateController extends Controller
 
         $time = $subscription->event->duration / 60;
         if (intval($time) > 0) {
-            $durationString = intval($time) . ' hora' . ($time % 1 > 0 ? ' e ' . 60 * ($time % 1) . ' minutos' : '');
+            $durationString = intval($time) . (intval($time) == 1 ? ' hora' : ' horas') . ($time % 1 > 0 ? ' e ' . 60 * ($time % 1) . ' minutos' : '');
         } else {
             $durationString = 60 * ($time % 1) . ' minutos';
         }
