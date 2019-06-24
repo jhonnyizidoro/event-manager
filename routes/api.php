@@ -40,6 +40,7 @@ Route::prefix('user')->group(function() {
 	Route::get('events', 'UserController@events')->middleware('auth');
 	Route::get('events-followed', 'UserController@followedEvents')->middleware('auth');
 	Route::get('events-managed', 'UserController@managedEvents')->middleware('auth');
+	Route::get('events-subscribed', 'UserController@subscribedEvents')->middleware('auth');
 
 	Route::get('{user_id}/events', 'UserController@events');
 	Route::get('{user_id}/followings', 'UserController@getFollowings')->middleware('auth');
@@ -91,6 +92,9 @@ Route::prefix('event')->group(function() {
 	Route::put('{event_id}/follow', 'EventController@follow')->middleware('auth');
 	Route::put('{id}/post', 'EventController@addPost')->middleware('auth');
 	Route::put('{id}/subscribe', 'EventController@subscribe')->middleware('auth');
+	Route::put('{id}/checkin', 'EventController@checkin')->middleware('auth');
+	Route::put('{id}/checkout', 'EventController@checkout')->middleware('auth');
+	Route::get('{id}/posts', 'EventController@listPosts')->middleware('auth');
 });
 
 //Rotdas para gerenciamentos de certificados

@@ -176,5 +176,11 @@ class User extends Authenticatable implements JWTSubject
 		}
 
 		return $formattedPostsByMonth;
+
+	}
+
+	public function events_subscribed()
+	{
+		return $this->belongsToMany('App\Models\Event', 'subscriptions', 'user_id', 'event_id');
 	}
 }

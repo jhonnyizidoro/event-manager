@@ -104,7 +104,6 @@ class UserProfileController extends Controller
             ])
             ->where('is_active', true)
             ->orderBy('created_at', 'desc')
-            ->take(10)
             ->get();
 
         return json($posts, 'Posts buscados.');
@@ -129,6 +128,7 @@ class UserProfileController extends Controller
             $post->user;
             $post->user->profile;
             $post->comments;
+            $post->postable;
 
             return response()->json($post, 200);
 

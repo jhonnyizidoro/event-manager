@@ -15,7 +15,7 @@ class Event extends Model
 	];
 
 	protected $appends = [
-		'is_following', 'is_managing', 'is_subscribed', 'followers_count', 'duration'
+		'is_following', 'is_managing', 'is_subscribed', 'followers_count', 'subscribers_count', 'duration', 'checkinable', 'checkoutable'
 	];
 
 	public function getIsFollowingAttribute()
@@ -38,6 +38,11 @@ class Event extends Model
 		return DB::table('follows')->where([ 'followable_type' => Event::class, 'followable_id' => $this->id ])->count();
 	}
 
+	public function getSubscribersCountAttribute()
+	{
+		return DB::table('subscriptions')->where([ 'event_id' => $this->id ])->count();
+	}
+
 	public function getIsSubscribedAttribute()
 	{
 		if (is_null(Auth::user())) return false;
@@ -54,6 +59,18 @@ class Event extends Model
 	public function getDurationAttribute()
 	{
 		return Carbon::parse($this->starts_at)->diffInMinutes(Carbon::parse($this->ends_at));
+	}
+
+	public function getCheckinableAttribute()
+	{
+		$diff = Carbon::parse($this->starts_at)->diffInMinutes(Carbon::now());
+		return $diff >= -15 && $diff <= 15;
+	}
+
+	public function getCheckoutableAttribute()
+	{
+		$diff = Carbon::parse($this->ends_at)->diffInMinutes(Carbon::now());
+		return  $diff >= -15 && $diff <= 15;
 	}
 
     public function owner()
