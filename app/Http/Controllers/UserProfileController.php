@@ -128,6 +128,7 @@ class UserProfileController extends Controller
             $post->user;
             $post->user->profile;
             $post->comments;
+            $post->postable;
 
             return response()->json($post, 200);
 
