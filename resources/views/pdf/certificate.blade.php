@@ -74,10 +74,7 @@
         }
         .wrapper .logo-preview img {
             max-width: 200px;
-            position: absolute;
-            bottom: -520px;
-            left: 40%;
-
+            max-height: 120px;
         }
         .wrapper .signature-preview {
             margin-top: 150px;
