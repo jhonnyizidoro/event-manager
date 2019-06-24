@@ -289,7 +289,7 @@ class UserController extends Controller
             'address.city.state:id,name,code',
             'owner:id,name,nickname',
             'owner.profile:id,cover,picture,user_id'
-        ])->orderBy('starts_at', 'asc')->where('is_active', true)->get();
+        ])->orderBy('starts_at', 'asc')->where('is_active', true)->where('starts_at', '>=', Carbon::now())->get();
 
         return response()->json($events, 200);
     }
@@ -302,17 +302,17 @@ class UserController extends Controller
             'address.city.state:id,name,code',
             'owner:id,name,nickname',
             'owner.profile:id,cover,picture,user_id'
-        ])->orderBy('starts_at', 'asc')->where(['events.is_active' => true])->get();
+        ])->orderBy('starts_at', 'asc')->where('events.is_active', true)->where('starts_at', '>=', Carbon::now())->get();
 
         $managedThroughStaff = Event::whereHas('staffs', function($q) {
-            $q->whereIn('staffs.id', Auth::user()->member_staffs()->pluck('staff.id')->toArray());
+            $q->whereIn('staff.id', Auth::user()->member_staffs()->pluck('staff.id')->toArray());
         })->with([
             'address:id,street,number,neighborhood,city_id,name',
             'address.city:id,name,state_id',
             'address.city.state:id,name,code',
             'owner:id,name,nickname',
             'owner.profile:id,cover,picture,user_id'
-        ])->orderBy('starts_at', 'asc')->where(['events.is_active' => true])->get();
+        ])->orderBy('starts_at', 'asc')->where('is_active', true)->where('starts_at', '>=', Carbon::now())->get();
 
         $managedEvents = $managedEvents->merge($managedThroughStaff);
 
@@ -327,7 +327,20 @@ class UserController extends Controller
             'address.city.state:id,name,code',
             'owner:id,name,nickname',
             'owner.profile:id,cover,picture,user_id'
-        ])->get();
+        ])->orderBy('starts_at', 'asc')->where('is_active', true)->where('starts_at', '>=', Carbon::now())->get();
+
+        return response()->json($events, 200);
+    }
+
+    public function subscribedEvents()
+    {
+        $events = Auth::user()->events_subscribed()->with([
+            'address:id,street,number,neighborhood,city_id,name',
+            'address.city:id,name,state_id',
+            'address.city.state:id,name,code',
+            'owner:id,name,nickname',
+            'owner.profile:id,cover,picture,user_id'
+        ])->orderBy('starts_at', 'asc')->where('is_active', true)->where('starts_at', '>=', Carbon::now())->get();
 
         return response()->json($events, 200);
     }
