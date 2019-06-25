@@ -132,7 +132,7 @@ class Event extends Model
 	public function notificateInterestedUsers()
 	{
 		$notification = new Notification();
-		$notification->text = 'Novo evento que pode te interessar: ' . $this->name .  ', dia ' . Carbon\Carbon::parse($this->starts_at)->isoFormat('D [de] MMMM [de] Y');
+		$notification->text = 'Novo evento que pode te interessar: ' . $this->name .  ', dia ' . Carbon::parse($this->starts_at)->isoFormat('D [de] MMMM [de] Y');
 		$notification->save();
 
 		$users = $this->category->users_interested;
