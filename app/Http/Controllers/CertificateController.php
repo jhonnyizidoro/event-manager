@@ -60,7 +60,7 @@ class CertificateController extends Controller
         if (intval($time) > 0) {
             $durationString = intval($time) . (intval($time) == 1 ? ' hora' : ' horas') . ($time - intval($time) > 0 ? ' e ' . 60 * ($time - intval($time)) . ' minutos' : '');
         } else {
-            $durationString = 60 * ($time % 1) . ' minutos';
+            $durationString = 60 * ($time - intval($time)) . ' minutos';
         }
 
         $pdf = PDF::loadView('pdf.certificate', [
