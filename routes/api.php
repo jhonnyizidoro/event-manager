@@ -108,6 +108,7 @@ Route::prefix('certificate')->group(function() {
 
 	Route::get('user', 'CertificateController@userCertificates')->middleware('auth');
 	Route::get('{user_id}/user', 'CertificateController@userCertificates')->middleware('auth');
+	Route::get('validate/{code}', 'CertificateController@validateCertificate');
 });
 
 //Rotas para gerenciamento de equipes de administradores

@@ -164,5 +164,18 @@ class Event extends Model
 	public function posts()
     {
         return $this->morphMany('App\Models\Post', 'postable');
-    }
+	}
+
+	public function getNiceDurationString()
+	{
+		$time = $this->duration / 60;
+
+		if (intval($time) > 0) {
+            $durationString = intval($time) . (intval($time) == 1 ? ' hora' : ' horas') . ($time - intval($time) > 0 ? ' e ' . 60 * ($time - intval($time)) . ' minutos' : '');
+        } else {
+            $durationString = 60 * ($time - intval($time)) . ' minutos';
+		}
+
+		return $durationString;
+	}
 }

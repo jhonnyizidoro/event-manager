@@ -11,6 +11,7 @@ use App\Http\Requests\Certificate\UpdateCertificate as UpdateCertificateRequest;
 use Auth;
 use PDF;
 use App;
+use Carbon\Carbon;
 
 class CertificateController extends Controller
 {
@@ -74,5 +75,25 @@ class CertificateController extends Controller
         } else {
             return $pdf->stream("eventa_certificate_$subscription->id.pdf");
         }
+    }
+
+    public function validateCertificate($code)
+    {
+        $subscription = Subscription::where([ 'uuid' => $code ])->first();
+
+        if (is_null($subscription)) {
+            return response()->json(['status' => false, 'msg' => 'Código não encontrado.'], 500);
+        }
+
+        return response()->json([
+            'status' => true,
+            'msg' => 'Certificado válido.',
+            'data' => [
+                'user' => $subscription->user->name,
+                'event' => $subscription->event->name,
+                'duration' => $subscription->event->getNiceDurationString(),
+                'date' => Carbon::parse($subscription->event->starts_at)->isoFormat('D [de] MMMM [de] Y')
+            ]
+        ], 200);
     }
 }
