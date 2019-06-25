@@ -11,6 +11,7 @@ use App\Models\Certificate;
 use App\Models\User;
 use App\Models\Staff;
 use App\Models\Subscription;
+use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use Illuminate\Http\Request;
@@ -142,6 +143,13 @@ class EventController extends Controller
             $follows->pivot->delete();
         } else {
             Auth::user()->events_followed()->save($event);
+
+            $notification = new Notification();
+            $notification->text = Auth::user()->name . ' começou a seguir seu evento ' . $event->name . '.';
+            $notification->save();
+
+            $event->owner->notifications()->save($notification);
+            $notification->send($event->owner);
         }
 
         return response()->json('Evento seguido/deixado de seguir.', 200);

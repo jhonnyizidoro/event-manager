@@ -9,6 +9,7 @@ use App\Models\Address;
 use App\Models\Follow;
 use App\Models\Category;
 use App\Models\Event;
+use App\Models\Notification;
 use App\Http\Requests\User\NewUser as NewUserRequest;
 use App\Http\Requests\User\UpdateUser as UpdateUserRequest;
 use App\Http\Requests\UserProfile\UpdateUserProfile as UpdateUserProfileRequest;
@@ -236,8 +237,16 @@ class UserController extends Controller
     {
         $user = User::findOrFail($user_id);
 
-        if (!Auth::user()->followings->contains($user))
+        if (!Auth::user()->followings->contains($user)) {
             Auth::user()->followings()->save($user);
+
+            $notification = new Notification();
+            $notification->text = Auth::user()->name . ' começou a te seguir.';
+            $notification->save();
+
+            $user->notifications()->save($notification);
+            $notification->send($user);
+        }
 
         return json([], 'Começou a seguir com sucesso.');
     }

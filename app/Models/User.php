@@ -146,7 +146,7 @@ class User extends Authenticatable implements JWTSubject
 
 	public function comments()
 	{
-		return $this->hasMany('App\Models\Comment');	
+		return $this->hasMany('App\Models\Comment');
 	}
 
 	public function subscriptions()
@@ -182,5 +182,23 @@ class User extends Authenticatable implements JWTSubject
 	public function events_subscribed()
 	{
 		return $this->belongsToMany('App\Models\Event', 'subscriptions', 'user_id', 'event_id');
+	}
+
+	public static function boot()
+	{
+		parent::boot();
+
+		static::created(function(User $model) {
+			$model->welcomeNotification();
+		});
+	}
+
+	public function welcomeNotification()
+	{
+		$notification = new Notification();
+		$notification->text = 'Bem-vindo ao EVENTA! Comece a navegar pelos eventos e crie um para você e seus amigos agora mesmo!';
+		$notification->save();
+
+		$user->notifications()->save($notification);
 	}
 }

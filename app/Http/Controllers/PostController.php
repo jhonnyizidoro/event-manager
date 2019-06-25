@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Comment;
 use App\Models\Follow;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Http\Requests\Post\NewPost as NewPostRequest;
 use Auth;
@@ -152,6 +153,13 @@ class PostController extends Controller
             $likes->pivot->delete();
         } else {
             Auth::user()->posts_liked()->save($post);
+
+            $notification = new Notification();
+            $notification->text = Auth::user()->name . ' curtiu o seu post.';
+            $notification->save();
+
+            $post->user->notifications()->save($notification);
+            $notification->send($post->user);
         }
 
         return response()->json('Post curtido/descurtido com sucesso', 200);

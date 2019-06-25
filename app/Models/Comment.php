@@ -45,5 +45,30 @@ class Comment extends Model
 	public function likes()
     {
         return $this->morphMany('App\Models\Post', 'likeable');
-    }
+	}
+
+	public static function boot()
+	{
+		parent::boot();
+
+		static::created(function(Comment $model) {
+			$model->notificateOwner();
+		});
+	}
+
+	public function notificateOwner()
+	{
+		$notification = new Notification();
+
+		if ($this->commentable_type == \App\Models\Post::class) {
+			$notification->text = $this->user->name . ' postou um comentário em um post seu.';
+		} else {
+			$notification->text = $this->user->name . ' postou uma resposta a um comentário seu.';
+		}
+
+		$notification->save();
+
+		$this->commentable->user->notifications()->save($notification);
+		$notification->send($this->commentable->user);
+	}
 }

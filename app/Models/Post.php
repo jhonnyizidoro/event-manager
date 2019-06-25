@@ -63,5 +63,32 @@ class Post extends Model
 	public function likes()
     {
         return $this->morphMany('App\Models\Like', 'likeable');
-    }
+	}
+
+	public static function boot()
+	{
+		parent::boot();
+
+		static::created(function(Post $model) {
+			$model->notificateOwner();
+		});
+	}
+
+	public function notificateOwner()
+	{
+		$notification = new Notification();
+
+		if ($this->postable_type == \App\Models\Event::class) {
+			$notification->text = $this->user->name . ' acabou de adicionar uma postagem no seu evento ' . $this->postable->name . '.';
+			$user = $this->postable->owner;
+		} else {
+			$notification->text = $this->user->name . ' acabou de adicionar uma postagem no seu perfil!';
+			$user = $this->postable->user;
+		}
+
+		$notification->save();
+
+		$user->notifications()->save($notification);
+		$notification->send($user);
+	}
 }
