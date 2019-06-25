@@ -65,12 +65,13 @@ class StaffController extends Controller
 
             if ($staff->members->contains($user)) {
                 $model = $staff->members()->where('user_id', $user->id)->wherePivot('is_active', false)->first();
-                $model->pivot->is_active = true;
+				$model->pivot->update([
+					'is_active' => true
+				]);
             } else {
                 $staff->members()->save($user);
             }
 
-            $staff->members()->save($user);
             return json($user, 'Membro adicionado.');
         } catch (\Exception $e) {
             return json([], $e->getMessage());
