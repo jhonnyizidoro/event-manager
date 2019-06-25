@@ -53,6 +53,7 @@ Route::prefix('user')->group(function() {
 Route::prefix('address')->group(function() {
 	Route::put('user', 'AddressController@updateUserAddress')->middleware('auth');
 	Route::put('event', 'AddressController@updateEventAddress')->middleware('auth');
+	Route::put('{id}', 'AddressController@update')->middleware('auth');
 });
 
 //Rotas para gerenciamento das cidades

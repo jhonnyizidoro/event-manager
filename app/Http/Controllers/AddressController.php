@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Http\Requests\Address\UpdateUserAddress as UpdateUserAddressRequest;
 use App\Http\Requests\Address\UpdateEventAddress as UpdateEventAddressRequest;
 use App\Http\Controllers\Webservices\GoogleController;
+use Illuminate\Http\Request;
 use Auth;
 
 class AddressController extends Controller
@@ -28,16 +29,10 @@ class AddressController extends Controller
 	 * TODO: se existir id da cidade busca as geolocalizações
 	 * @return Resource: endereço
      */
-	public function update($model, $request)
+	public function update($id, Request $request)
 	{
-		$geolocation = GoogleController::getGeolocation($request);
-		if ($geolocation) {
-			$request->merge([
-				'latitude' => $geolocation->latitude,
-				'longitude' => $geolocation->longitude,
-			]);
-		}
-		$model->address()->update($request->all());
-		return json($model->address, 'Endereço alterado com sucesso.');
+		$model = Address::findOrFail($id);
+		$model->update($request->all());
+		return json($model->address, 'Endereço atualizado com sucesso.');
 	}
 }
