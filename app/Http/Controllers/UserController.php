@@ -389,4 +389,37 @@ class UserController extends Controller
 		];
 		return response()->json($dashboard, 200);
 	}
+
+	public function discover()
+	{
+		$user = Auth::user();
+
+		$eventsByCity = Event::with([
+			'address',
+            'address.city',
+            'address.city.state',
+            'owner',
+            'owner.profile'
+		])->whereHas('address', function($q) use ($user) {
+			$q->where('city_id', $user->address->city->id);
+		})->get();
+
+		$userInterests = [];
+		foreach ($user->interests as $interest) {
+			$userInterests[] = $interest->pivot->category_id;
+		}
+		$eventsByCategory = Event::with([
+			'address',
+            'address.city',
+            'address.city.state',
+            'owner',
+            'owner.profile'
+		])->whereIn('category_id', $userInterests)->get();
+
+		$discover = [
+			'eventsByCity' => $eventsByCity,
+			'eventsByCategory' => $eventsByCategory
+		];
+		return response()->json($discover, 200);
+	}
 }
